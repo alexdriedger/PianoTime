@@ -15,15 +15,13 @@ public class MusicPlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
 
-        mMP = MediaPlayer.create(this, R.raw.moana_midi);
+        initMediaPlayer();
 
         final Button mPlayButton = findViewById(R.id.button_play);
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (!mMP.isPlaying()) {
-                    mMP.start();
-//                }
+                mMP.start();
             }
         });
 
@@ -31,9 +29,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
         mPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (!mMP.isPlaying()) {
-                    mMP.pause();
-//                }
+                mMP.pause();
             }
         });
     }
@@ -41,11 +37,25 @@ public class MusicPlayerActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mMP.stop();
+        releaseResources();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        initMediaPlayer();
+    }
+
+    private void releaseResources() {
+        if (mMP != null) {
+            mMP.stop();
+            mMP.release();
+            mMP = null;
+        }
+    }
+
+    private void initMediaPlayer() {
+        releaseResources();
+        mMP = MediaPlayer.create(this, R.raw.moana_midi);
     }
 }
