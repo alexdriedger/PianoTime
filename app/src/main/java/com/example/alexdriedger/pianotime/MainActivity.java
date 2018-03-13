@@ -27,12 +27,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this,  KeyboardActivity.class);
+        final Button mKeyboardButton = findViewById(R.id.button_to_keyboard);
+        mKeyboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeActivity(KeyboardActivity.class);
+            }
+        });
+
+    }
+
+    private void changeActivity(Class c) {
+        Intent intent = new Intent(this, c);
         startActivity(intent);
-
-//        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.moana_midi);
-//        mediaPlayer.start();
-
     }
 
     private void changeInstrument(byte instrument, byte channel) {
