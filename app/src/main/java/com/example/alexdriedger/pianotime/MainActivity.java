@@ -27,22 +27,36 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this,  KeyboardActivity.class);
+        Button mKeyboardButton = findViewById(R.id.button_to_keyboard);
+        mKeyboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeActivity(KeyboardActivity.class);
+            }
+        });
+
+        mKeyboardButton = findViewById(R.id.button_to_soundboard);
+        mKeyboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeActivity(SoundPadActivity.class);
+            }
+        });
+
+    }
+
+    private void changeActivity(Class c) {
+        Intent intent = new Intent(this, c);
         startActivity(intent);
-
-//        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.moana_midi);
-//        mediaPlayer.start();
-
     }
 
-    private void changeInstrument(byte instrument, byte channel) {
-        event = new byte[2];
-        event[0] = (byte) (0xC0 | channel);  // 0xC0 = change instrument, 0x00 = channel 1
-        event[1] = instrument;  // 0x3C = middle C // byte
-//        event[2] = (byte) 0x7F;  // 0x7F = the maximum velocity (127)
-
-        // Send the MIDI event to the synthesizer.
-        midiDriver.write(event);
-    }
+//    private void changeInstrument(byte instrument, byte channel) {
+//        event = new byte[2];
+//        event[0] = (byte) (0xC0 | channel);  // 0xC0 = change instrument, 0x00 = channel 1
+//        event[1] = instrument;  // 0x3C = middle C // byte
+//
+//        // Send the MIDI event to the synthesizer.
+//        midiDriver.write(event);
+//    }
 
 }
