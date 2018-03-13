@@ -6,7 +6,7 @@ import android.widget.Button;
 
 public class SoundPadActivity extends AppCompatActivity {
 
-    // TODO : MAKE ABSTRACT CLASS FOR MIDI ACTIVTIES TO HANDLE MIDI CONTROLLER DRY
+    // TODO : MAKE ABSTRACT CLASS FOR MIDI ACTIVTIES TO HANDLE MIDI CONTROLLER LIFE CYCLE METHODS
 
     private MidiController mMidiController;
 
@@ -15,27 +15,15 @@ public class SoundPadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sound_pad);
 
-        // Instantiate the driver.
-        // TODO : LIFE CYCLE METHODS FOR MIDI DRIVER
-        // TODO : CHECK IF HAVING MULTIPLE MIDI DRIVERS MAKES WEIRD SOUNDS OR IF IT WAS FROM NOT STOPPING IT
-//        if (midiDriver == null) {
-//            midiDriver = new MidiDriver();
-//        }
-
         mMidiController = MidiController.create();
         mMidiController.start();
 
         initListeners();
-
-//        midiDriver.start();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-//        if (midiDriver == null) {
-//            midiDriver = new MidiDriver();
-//        }
         if (mMidiController == null) {
             mMidiController = MidiController.create();
         }
@@ -44,14 +32,12 @@ public class SoundPadActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        midiDriver.start();
         mMidiController.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        midiDriver.stop();
         mMidiController.stop();
     }
 
