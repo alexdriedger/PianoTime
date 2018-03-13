@@ -57,5 +57,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
     private void initMediaPlayer() {
         releaseResources();
         mMP = MediaPlayer.create(this, R.raw.moana_midi);
+        mMP.start();mMP.pause(); // To stop pause button from causing error state
     }
 }
