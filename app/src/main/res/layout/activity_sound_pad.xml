@@ -7,35 +7,98 @@
     tools:context="com.example.alexdriedger.pianotime.SoundPadActivity">
 
     <Button
+        android:id="@+id/button_soundpad_1_1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="1"
+        app:layout_constraintBottom_toTopOf="@+id/button_soundpad_2_1"
+        app:layout_constraintEnd_toStartOf="@+id/button_soundpad_1_2" />
+
+    <Button
+        android:id="@+id/button_soundpad_1_2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="2"
+        app:layout_constraintBottom_toTopOf="@+id/button_soundpad_2_2"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline3" />
+
+    <Button
         android:id="@+id/button_soundpad_1_3"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
         android:text="3"
+        app:layout_constraintBottom_toTopOf="@+id/button_soundpad_2_3"
+        app:layout_constraintStart_toEndOf="@+id/button_soundpad_1_2" />
+
+    <Button
+        android:id="@+id/button_soundpad_3_3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="9"
+        app:layout_constraintStart_toEndOf="@+id/button_soundpad_3_2"
+        app:layout_constraintTop_toBottomOf="@+id/button_soundpad_2_3" />
+
+    <Button
+        android:id="@+id/button_soundpad_3_2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="8"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/button_soundpad_2_2" />
+
+    <Button
+        android:id="@+id/button_soundpad_3_1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:text="7"
+        app:layout_constraintEnd_toStartOf="@+id/button_soundpad_3_2"
+        app:layout_constraintTop_toBottomOf="@+id/button_soundpad_2_1" />
+
+    <Button
+        android:id="@+id/button_soundpad_2_3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:text="6"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintStart_toEndOf="@+id/button_soundpad_1_2"
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <Button
-        android:id="@+id/button_soundpad_1_2"
+        android:id="@+id/button_soundpad_2_2"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:text="2"
+        android:text="5"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <Button
-        android:id="@+id/button_soundpad_1_1"
+        android:id="@+id/button_soundpad_2_1"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
-        android:text="1"
+        android:text="4"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toStartOf="@+id/button_soundpad_1_2"
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
