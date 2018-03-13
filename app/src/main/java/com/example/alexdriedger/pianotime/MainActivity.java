@@ -43,6 +43,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mKeyboardButton = findViewById(R.id.button_to_music_player);
+        mKeyboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeActivity(MusicPlayerActivity.class);
+            }
+        });
+
     }
 
     private void changeActivity(Class c) {
