@@ -4,7 +4,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * Created by Alex Driedger on 2018-03-13.
+ * OnTouchListener for playing midi notes
  */
 
 public class MidiOnTouchListener implements View.OnTouchListener {
