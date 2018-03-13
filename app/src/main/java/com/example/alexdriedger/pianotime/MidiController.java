@@ -82,4 +82,13 @@ public class MidiController {
         // Send the MIDI event to the synthesizer.
         mMidiDriver.write(event);
     }
+
+    public static void changeInstrument(byte instrument, byte channel) {
+        byte[] event = new byte[2];
+        event[0] = (byte) (0xC0 | channel);  // 0xC0 = change instrument, 0x00 = channel 1
+        event[1] = instrument;  // 0x3C = middle C // byte
+
+        // Send the MIDI event to the synthesizer.
+        mMidiDriver.write(event);
+    }
 }

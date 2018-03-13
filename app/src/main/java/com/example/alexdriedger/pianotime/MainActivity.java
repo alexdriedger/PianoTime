@@ -27,11 +27,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Button mKeyboardButton = findViewById(R.id.button_to_keyboard);
+        Button mKeyboardButton = findViewById(R.id.button_to_keyboard);
         mKeyboardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 changeActivity(KeyboardActivity.class);
+            }
+        });
+
+        mKeyboardButton = findViewById(R.id.button_to_soundboard);
+        mKeyboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeActivity(SoundPadActivity.class);
             }
         });
 
@@ -42,14 +50,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void changeInstrument(byte instrument, byte channel) {
-        event = new byte[2];
-        event[0] = (byte) (0xC0 | channel);  // 0xC0 = change instrument, 0x00 = channel 1
-        event[1] = instrument;  // 0x3C = middle C // byte
-//        event[2] = (byte) 0x7F;  // 0x7F = the maximum velocity (127)
-
-        // Send the MIDI event to the synthesizer.
-        midiDriver.write(event);
-    }
+//    private void changeInstrument(byte instrument, byte channel) {
+//        event = new byte[2];
+//        event[0] = (byte) (0xC0 | channel);  // 0xC0 = change instrument, 0x00 = channel 1
+//        event[1] = instrument;  // 0x3C = middle C // byte
+//
+//        // Send the MIDI event to the synthesizer.
+//        midiDriver.write(event);
+//    }
 
 }
