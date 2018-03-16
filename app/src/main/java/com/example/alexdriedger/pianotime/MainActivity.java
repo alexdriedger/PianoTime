@@ -13,8 +13,13 @@ import android.widget.Button;
 
 import com.leff.midi.MidiFile;
 import com.leff.midi.MidiTrack;
+import com.leff.midi.event.MidiEvent;
+import com.leff.midi.event.NoteOff;
+import com.leff.midi.event.NoteOn;
+import com.leff.midi.event.ProgramChange;
 import com.leff.midi.event.meta.Tempo;
 import com.leff.midi.event.meta.TimeSignature;
+import com.leff.midi.util.MidiProcessor;
 
 import org.billthefarmer.mididriver.MidiDriver;
 
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         // 1. Create some MidiTracks
         MidiTrack tempoTrack = new MidiTrack();
         MidiTrack noteTrack = new MidiTrack();
+        MidiTrack noteTrack2 = new MidiTrack();
 
 // 2. Add events to the tracks
 // Track 0 is the tempo map
@@ -72,26 +78,49 @@ public class MainActivity extends AppCompatActivity {
         tempoTrack.insertEvent(ts);
         tempoTrack.insertEvent(tempo);
 
+        MidiTrack instrumentTrack = new MidiTrack();
+
+        ProgramChange pc = new ProgramChange(0, 1, ProgramChange.MidiProgram.STRING_ENSEMBLE_1.programNumber());
+        noteTrack2.insertEvent(pc);
+
 // Track 1 will have some notes in it
-        final int NOTE_COUNT = 80;
-
-        for(int i = 0; i < NOTE_COUNT; i++)
+        for(int i = 0; i < 80; i++)
         {
-            int channel = 0;
-            int pitch = 1 + i;
-            int velocity = 100;
-            long tick = i * 480;
-            long duration = 120;
+            int channel = 0, pitch = 1 + i, velocity = 100;
+            NoteOn on = new NoteOn(i * 480, channel, pitch, velocity);
+            NoteOff off = new NoteOff(i * 480 + 120, channel, pitch, 0);
 
-            noteTrack.insertNote(channel, pitch, velocity, tick, duration);
+            noteTrack.insertEvent(on);
+            noteTrack.insertEvent(off);
+
+            // There is also a utility function for notes that you should use
+            // instead of the above.
+            noteTrack2.insertNote(1, pitch + 2, velocity, i * 480, 600);
         }
 
 // 3. Create a MidiFile with the tracks we created
         List<MidiTrack> tracks = new ArrayList<MidiTrack>();
         tracks.add(tempoTrack);
         tracks.add(noteTrack);
+        tracks.add(noteTrack2);
+        tracks.add(instrumentTrack);
 
         MidiFile midi = new MidiFile(MidiFile.DEFAULT_RESOLUTION, tracks);
+//        for (MidiTrack track : tracks) {
+//            midi.addTrack(track);
+//        }
+
+//        MidiFile midi2 = new MidiFile();
+//
+//        NoteOn on = new NoteOn(480, 0, 20, 100);
+//
+//        MidiTrack noteTrack2 = new MidiTrack();
+//
+//        noteTrack2.insertEvent(on);
+//
+//        midi2.addTrack(noteTrack2);
+
+
 
 // 4. Write the MIDI data to a file
         File output = new File(getApplicationContext().getFilesDir(), "exampleout.mid");
@@ -104,9 +133,34 @@ public class MainActivity extends AppCompatActivity {
             System.err.println(e);
             Log.d("midi", "Failed to write midi file");
         }
-        
+
+//        // 2. Create a MidiProcessor
+//        MidiProcessor processor = new MidiProcessor(midi2);
+//
+//        // 3. Register listeners for the events you're interested in
+//        EventPrinter ep = new EventPrinter("Individual Listener");
+//        processor.registerEventListener(ep, Tempo.class);
+//        processor.registerEventListener(ep, NoteOn.class);
+//
+//        // or listen for all events:
+////        EventPrinter ep2 = new EventPrinter("Listener For All");
+////        processor.registerEventListener(ep2, MidiEvent.class);
+//
+//        // 4. Start the processor
+//        processor.start();
+
+
+
+
         MediaPlayer mp = MediaPlayer.create(this, Uri.fromFile(output));
         mp.start();
+//
+//        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mediaPlayer) {
+//                mediaPlayer.start();
+//            }
+//        });
 
     }
 
