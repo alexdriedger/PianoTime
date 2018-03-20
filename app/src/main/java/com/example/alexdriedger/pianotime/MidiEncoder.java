@@ -20,6 +20,8 @@ import java.util.List;
 
 public class MidiEncoder {
 
+    private static final int TEMPO_ONE_MILLI = 125;
+
     private List<MidiTrack> mTracks;
 
     public MidiEncoder() {
@@ -106,7 +108,7 @@ public class MidiEncoder {
 
     private static Tempo getDefaultTempo() {
         Tempo tempo = new Tempo();
-        tempo.setBpm(228);
+        tempo.setBpm(TEMPO_ONE_MILLI);
         return tempo;
     }
 }

@@ -1,9 +1,15 @@
 package com.example.alexdriedger.pianotime;
 
+import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.Uri;
+
 import com.leff.midi.event.MidiEvent;
 import com.leff.midi.event.NoteOff;
 import com.leff.midi.event.NoteOn;
 import com.leff.midi.event.ProgramChange;
+
+import java.io.File;
 
 /**
  * Created by Alex Driedger on 2018-03-16.
@@ -15,6 +21,7 @@ public class Mixer {
     private static MidiController mMidiController;
     private static boolean mIsRecording;
     private static long mRecordingStartTime;
+    private static MediaPlayer mMediaPlayer;
 
 
     // TODO : SINGLETON????
@@ -23,6 +30,7 @@ public class Mixer {
         mMidiController = MidiController.create();
         mIsRecording = false;
         mRecordingStartTime = System.currentTimeMillis(); // Default value, no not rely on this
+        mMediaPlayer = null;
     }
 
     public static Mixer create() {
@@ -41,12 +49,12 @@ public class Mixer {
         mMidiController.release();
     }
 
-    public static void startRecording() {
+    public void startRecording() {
         mIsRecording = true;
         mRecordingStartTime = System.currentTimeMillis();
     }
 
-    public static void stopRecording() {
+    public void stopRecording() {
         mIsRecording = false;
     }
 
@@ -113,5 +121,14 @@ public class Mixer {
         return ((testByte | 0x10) == compareTo);
 //        return (Byte.compare(testByte, compareTo) >= 0) &&
 //                (Byte.compare(testByte, (byte) (compareTo + (byte) 0x10)) <= 0);
+    }
+
+    public void playRecording(Context c) {
+        File f = new File(c.getFilesDir() + File.separator + "testfile.mid");
+
+        mMidiEncoder.exportToFile(f);
+
+        mMediaPlayer = MediaPlayer.create(c, Uri.fromFile(f));
+        mMediaPlayer.start();
     }
 }

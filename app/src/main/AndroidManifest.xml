@@ -16,12 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".KeyboardActivity"
-            android:screenOrientation="landscape" />
         <activity android:name=".SoundPadActivity" />
         <activity android:name=".MusicPlayerActivity" />
-        <activity android:name=".SoundActivity"></activity>
+        <activity android:name=".SoundActivity"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>
