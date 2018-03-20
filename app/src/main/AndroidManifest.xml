@@ -20,7 +20,8 @@
             android:name=".KeyboardActivity"
             android:screenOrientation="landscape" />
         <activity android:name=".SoundPadActivity" />
-        <activity android:name=".MusicPlayerActivity"></activity>
+        <activity android:name=".MusicPlayerActivity" />
+        <activity android:name=".SoundActivity"></activity>
     </application>
 
 </manifest>

@@ -12,7 +12,8 @@ import org.billthefarmer.mididriver.MidiDriver;
 
 public class KeyboardActivity extends AppCompatActivity {
 
-    private MidiController mMidiController;
+//    private MidiController mMixer;
+    private Mixer mMixer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,29 +22,29 @@ public class KeyboardActivity extends AppCompatActivity {
 
         keyInit();
 
-        mMidiController = MidiController.create();
-        mMidiController.start();
+        mMixer = Mixer.create();
+        mMixer.start();
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (mMidiController == null) {
-            mMidiController = MidiController.create();
+        if (mMixer == null) {
+            mMixer = Mixer.create();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mMidiController.start();
+        mMixer.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mMidiController.stop();
+        mMixer.stop();
     }
 
     /**

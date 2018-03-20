@@ -1,5 +1,9 @@
 package com.example.alexdriedger.pianotime;
 
+import com.leff.midi.event.NoteOff;
+import com.leff.midi.event.NoteOn;
+import com.leff.midi.event.ProgramChange;
+
 import org.billthefarmer.mididriver.MidiDriver;
 
 /**
@@ -7,6 +11,12 @@ import org.billthefarmer.mididriver.MidiDriver;
  */
 
 public class MidiController {
+
+    public static final byte NOTE_ON = (byte) 0x90;
+    public static final byte NOTE_OFF = (byte) 0x80;
+    public static final byte CHANGE_INSTRUMENT = (byte) 0xC0;
+    public static final byte MAX_VEL = (byte) 0x7F;
+    public static final byte MIN_VEL = (byte) 0x00;
 
     private static MidiDriver mMidiDriver;
     private static boolean isStarted;
@@ -76,7 +86,7 @@ public class MidiController {
     public static void playNote(byte chan, byte note, byte vel) {
 
         byte [] event = new byte[3];
-        event[0] = (byte) (0x90 | chan);  // 0x90 = note On
+        event[0] = (byte) (NOTE_ON | chan);
         event[1] = note;
         event[2] = vel;
 
@@ -85,21 +95,34 @@ public class MidiController {
 
     }
 
+    public static void playNote(NoteOn n) {
+        playNote((byte) n.getChannel(), (byte) n.getNoteValue(), (byte) n.getVelocity());
+    }
+
     public static void stopNote(byte chan, byte note) {
 
         byte[] event = new byte[3];
-        event[0] = (byte) (0x80 | chan);  // 0x80 = note Off
+        event[0] = (byte) (NOTE_OFF | chan);
         event[1] = note;
-        event[2] = (byte) 0x00;  // 0x00 = the minimum velocity (0)
+        event[2] = MIN_VEL;
 
         mMidiDriver.write(event);
+    }
+
+    public static void stopNote(NoteOff n) {
+        stopNote((byte) n.getChannel(), (byte) n.getNoteValue());
     }
 
     public static void changeInstrument(byte instrument, byte channel) {
         byte[] event = new byte[2];
-        event[0] = (byte) (0xC0 | channel);  // 0xC0 = change instrument
+        event[0] = (byte) (CHANGE_INSTRUMENT | channel);
         event[1] = instrument;
 
         mMidiDriver.write(event);
     }
+
+    public static void changeInstrument(ProgramChange pc) {
+        changeInstrument((byte) pc.getProgramNumber(), (byte) pc.getChannel());
+    }
+
 }
