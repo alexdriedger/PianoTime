@@ -1,7 +1,10 @@
 package com.example.alexdriedger.pianotime;
 
 import android.content.pm.ActivityInfo;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -41,6 +44,15 @@ public class SoundActivity extends FragmentActivity {
                 mMixer.playRecording(getApplicationContext());
             }
         });
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+//        KeyboardFragment keyboardFragment = new KeyboardFragment();
+//        fragmentTransaction.add(R.id.sound_activity_main_area, keyboardFragment);
+        SoundPadFragment soundPadFragment = new SoundPadFragment();
+        fragmentTransaction.add(R.id.sound_activity_main_area, soundPadFragment);
+        fragmentTransaction.commit();
     }
 
     @Override

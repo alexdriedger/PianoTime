@@ -34,6 +34,7 @@ public class MidiOnTouchListener implements View.OnTouchListener {
 
         stop[0] = (byte) (0x80 | chan);
         stop[1] = note;
+        stop[2] = 0;
     }
 
     @Override

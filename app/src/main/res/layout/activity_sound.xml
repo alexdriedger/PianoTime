@@ -15,11 +15,17 @@
         android:id="@+id/play_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    
-    <fragment
-        class="com.example.alexdriedger.pianotime.KeyboardFragment"
-        android:id="@+id/keyboard_fragment"
+
+    <LinearLayout
+        android:id="@+id/sound_activity_main_area"
         android:layout_width="match_parent"
+        android:orientation="horizontal"
         android:layout_height="match_parent" />
+    
+    <!--<fragment-->
+        <!--class="com.example.alexdriedger.pianotime.KeyboardFragment"-->
+        <!--android:id="@+id/keyboard_fragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
 
 </LinearLayout>

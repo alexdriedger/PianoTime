@@ -14,14 +14,7 @@ import com.example.alexdriedger.pianotime.MidiController;
 
 import org.billthefarmer.mididriver.MidiDriver;
 
-public class KeyboardFragment extends Fragment {
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-////        setContentView(R.layout.activity_keyboard);
-//
-//    }
+public class KeyboardFragment extends android.support.v4.app.Fragment {
 
     @Nullable
     @Override

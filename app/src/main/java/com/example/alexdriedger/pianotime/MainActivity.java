@@ -46,14 +46,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mNavButton = findViewById(R.id.button_to_soundboard);
-        mNavButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeActivity(SoundPadActivity.class);
-            }
-        });
-
         mNavButton = findViewById(R.id.button_to_music_player);
         mNavButton.setOnClickListener(new View.OnClickListener() {
             @Override
