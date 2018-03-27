@@ -71,6 +71,13 @@ public class MidiEncoder {
     }
 
     /**
+     * Adds a new blank track
+     */
+    public void addTrack() {
+        mTracks.add(new MidiTrack());
+    }
+
+    /**
      * Writes all of the encoded MIDI data to a file.
      * @param file to write to. File will be overwritten
      * @return true if successful. False otherwise
@@ -83,6 +90,7 @@ public class MidiEncoder {
         }
         catch(IOException e) {
             System.err.println(e);
+            Log.e("MidiEncoder", "Could not write to file");
             return false;
         }
 

@@ -42,17 +42,17 @@ public class Mixer {
     public void start() {
         mMidiController.start();
 
-        // Change instruments
-        // TODO : FIGURE OUT WHY THESE DON'T WORK
-        MidiController.changeInstrument((byte) 0x70, (byte) 0x01);
-        MidiController.changeInstrument((byte) 0x71, (byte) 0x02);
-        MidiController.changeInstrument((byte) 0x78, (byte) 0x03);
-        MidiController.changeInstrument((byte) 0x77, (byte) 0x04);
-        MidiController.changeInstrument((byte) 0x72, (byte) 0x05);
-        MidiController.changeInstrument((byte) 0x73, (byte) 0x06);
-        MidiController.changeInstrument((byte) 0x74, (byte) 0x07);
-        MidiController.changeInstrument((byte) 0x75, (byte) 0x08);
-        MidiController.changeInstrument((byte) 0x76, (byte) 0x09);
+//        // Change instruments
+//        // TODO : FIGURE OUT WHY THESE DON'T WORK
+//        MidiController.changeInstrument((byte) 0x70, (byte) 0x01);
+//        MidiController.changeInstrument((byte) 0x71, (byte) 0x02);
+//        MidiController.changeInstrument((byte) 0x78, (byte) 0x03);
+//        MidiController.changeInstrument((byte) 0x77, (byte) 0x04);
+//        MidiController.changeInstrument((byte) 0x72, (byte) 0x05);
+//        MidiController.changeInstrument((byte) 0x73, (byte) 0x06);
+//        MidiController.changeInstrument((byte) 0x74, (byte) 0x07);
+//        MidiController.changeInstrument((byte) 0x75, (byte) 0x08);
+//        MidiController.changeInstrument((byte) 0x76, (byte) 0x09);
 
     }
 
@@ -123,7 +123,7 @@ public class Mixer {
             MidiController.changeInstrument((ProgramChange) event);
         }
 
-        if (mIsRecording) {
+        if (mIsRecording || event instanceof ProgramChange) {
             mMidiEncoder.addEvent(event, mMidiEncoder.getCurrentTrack());
         }
     }
@@ -145,6 +145,29 @@ public class Mixer {
 //                (Byte.compare(testByte, (byte) (compareTo + (byte) 0x10)) <= 0);
     }
 
+    private static long getCurrentMidiTime() {
+        return System.currentTimeMillis() - mRecordingStartTime;
+    }
+
+    /**
+     * Creates a ProgramChange event with the given parameters
+     * @param channel to change the instrument on. Must be 0 <= channel <= 15
+     * @param instruNum Number of the instrument. Must be 0 <= instruNum <= 127
+     * @return a ProgramChange event
+     */
+    public ProgramChange generateProgramChangeEvent(int channel, int instruNum) {
+        if (channel < 0 || 15 < channel) {
+            throw new IllegalArgumentException("Channel out of bounds");
+        }
+
+        if (instruNum < 0 || 127 < instruNum) {
+            throw new IllegalArgumentException("Instrument number out of bounds");
+        }
+
+        return new ProgramChange(getCurrentMidiTime(), channel, instruNum);
+    }
+
+    // TODO : CHANGE THIS
     public void playRecording(Context c) {
         File f = new File(c.getFilesDir() + File.separator + "testfile.mid");
 
@@ -152,5 +175,9 @@ public class Mixer {
 
         mMediaPlayer = MediaPlayer.create(c, Uri.fromFile(f));
         mMediaPlayer.start();
+    }
+
+    public void newTrack() {
+        mMidiEncoder.addTrack();
     }
 }
