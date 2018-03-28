@@ -13,7 +13,7 @@
             android:id="@+id/change_mode_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Soundpad" />
+            android:text="@string/mode_button_soundpad" />
 
         <Button
             android:id="@+id/start_record_button"

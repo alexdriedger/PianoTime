@@ -17,6 +17,7 @@ import java.security.Key;
 
 public class SoundActivity extends FragmentActivity implements ControlBarFragment.OnControlInteractionListener{
 
+    private static final String LOG_TAG = "Sound Activity";
     private static final String KEYBOARD_FRAG_TAG = "KEYBOARD_FRAG";
     private static final String SOUNDPAD_FRAG_TAG = "SOUNDPAD_FRAG";
     private static final String CONTROL_BAR_FRAG_TAG = "CONTROL_BAR_FRAG_TAG";
@@ -81,10 +82,8 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
 //        });
 
         // TODO : FRAGMENT TRANSITIONS
-        // TODO : GENERALIZE INIT KEYBOARD AND SOUNDPAD METHODS AND TAKE A MODE INSTEAD
-
-        initModeKeyboard();
         initControlBar();
+        changePlayerFragment(DEFAULT_MODE);
 
 
 
@@ -98,7 +97,7 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
         Fragment f = fragmentManager.findFragmentByTag(CONTROL_BAR_FRAG_TAG);
 
         if (f != null) {
-            Log.w("SoundActivity", "ControlBar fragment already initialized");
+            Log.w(LOG_TAG, "ControlBar fragment already initialized");
             return;
         }
 
@@ -109,81 +108,76 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
 
     }
 
-    private void initModeKeyboard() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment f = fragmentManager.findFragmentByTag(KEYBOARD_FRAG_TAG);
+    /**
+     * Changes mode.
+     * @param nextMode mode to change to.
+     * @return true on success. False otherwise
+     */
+    private boolean changePlayerFragment(MODE nextMode) {
+        String prevFragTag;
+        String nextFragTag;
+        Fragment prevFrag;
+        Fragment nextFrag;
 
-        if (f != null) {
-            Log.w("SoundActivity", "Keyboard already initialized");
-            return;
+        FragmentManager fm = getSupportFragmentManager();
+
+        // Determine which fragments to switch in and out
+        switch (nextMode) {
+            case KEYBOARD: {
+                prevFragTag = SOUNDPAD_FRAG_TAG;
+                nextFragTag = KEYBOARD_FRAG_TAG;
+
+                nextFrag = new KeyboardFragment();
+                break;
+            }
+            case SOUNDPAD: {
+                prevFragTag = KEYBOARD_FRAG_TAG;
+                nextFragTag = SOUNDPAD_FRAG_TAG;
+
+                nextFrag = new SoundPadFragment();
+                break;
+            }
+            default: throw new RuntimeException("SoundActivity: Unsupported mode: " + nextMode);
         }
 
-        mMode = MODE.KEYBOARD;
+        if (fm.findFragmentByTag(nextFragTag) != null) {
+            Log.w(LOG_TAG, nextFragTag + " is trying to be insterted but already exists");
+            return false;
+        }
 
+        prevFrag = fm.findFragmentByTag(prevFragTag);
+        FragmentTransaction ft = fm.beginTransaction();
+
+        if (prevFrag != null) {
+            ft.replace(R.id.sound_activity_main_area, nextFrag, nextFragTag);
+            Log.v(LOG_TAG, "Replaced " + prevFragTag + " with " + nextFragTag);
+        } else {
+            // There is no fragment present in the area
+            Log.v(LOG_TAG, "Added " + nextFragTag);
+            ft.add(R.id.sound_activity_main_area, nextFrag, nextFragTag);
+        }
+
+        ft.commit();
+
+        mMode = nextMode;
+        switch (nextMode) {
+            case KEYBOARD: initModeKeyboard(); break;
+            case SOUNDPAD: initModeSoundpad(); break;
+        }
+
+        return true;
+    }
+
+    private void initModeKeyboard() {
         // Change instrument
         Mixer.processEvent(mMixer.generateProgramChangeEvent(0, 8));
-
-        // Insert Piano fragment
-        SoundPadFragment spf = (SoundPadFragment) fragmentManager.findFragmentByTag(SOUNDPAD_FRAG_TAG);
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        KeyboardFragment keyboardFragment = new KeyboardFragment();
-
-        // Determine if soundpad fragment exists
-        if (spf != null) {
-            fragmentTransaction.replace(R.id.sound_activity_main_area, keyboardFragment, KEYBOARD_FRAG_TAG);
-        } else {
-            fragmentTransaction.add(R.id.sound_activity_main_area, keyboardFragment, KEYBOARD_FRAG_TAG);
-        }
-
-        fragmentTransaction.commit();
-
     }
 
     private void initModeSoundpad() {
-        mMode = MODE.SOUNDPAD;
-
         // Initialize instruments
         for (int i = 1; i < 10; i++) {
             Mixer.processEvent(mMixer.generateProgramChangeEvent(i, 111 + i));
         }
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment f = fragmentManager.findFragmentByTag(SOUNDPAD_FRAG_TAG);
-
-        if (f != null) {
-            Log.w("SoundActivity", "Soundpad already initialized");
-            return;
-        }
-
-        // Insert Piano fragment
-        KeyboardFragment kbf = (KeyboardFragment) fragmentManager.findFragmentByTag(KEYBOARD_FRAG_TAG);
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        SoundPadFragment soundPadFragment = new SoundPadFragment();
-
-        // Determine if soundpad fragment exists
-        if (kbf != null) {
-            fragmentTransaction.replace(R.id.sound_activity_main_area, soundPadFragment, SOUNDPAD_FRAG_TAG);
-        } else {
-            fragmentTransaction.add(R.id.sound_activity_main_area, soundPadFragment, SOUNDPAD_FRAG_TAG);
-        }
-
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-
-        fragmentTransaction.commit();
-
-//        Mixer.processEvent(mMixer.generateProgramChangeEvent(0, 8));
-//        Mixer.processEvent(mMixer.generateProgramChangeEvent(0, 8));
-//
-//
-//        MidiController.changeInstrument((byte) 0x70, (byte) 0x01);
-//        MidiController.changeInstrument((byte) 0x71, (byte) 0x02);
-//        MidiController.changeInstrument((byte) 0x78, (byte) 0x03);
-//        MidiController.changeInstrument((byte) 0x77, (byte) 0x04);
-//        MidiController.changeInstrument((byte) 0x72, (byte) 0x05);
-//        MidiController.changeInstrument((byte) 0x73, (byte) 0x06);
-//        MidiController.changeInstrument((byte) 0x74, (byte) 0x07);
-//        MidiController.changeInstrument((byte) 0x75, (byte) 0x08);
-//        MidiController.changeInstrument((byte) 0x76, (byte) 0x09);
 
     }
 
@@ -212,9 +206,9 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
     // TODO : IMPLEMENT THESE!!!
 
     @Override
-    public boolean onModeChange(MODE mode) {
-        Log.v(this.getLocalClassName(), "onModeChange to " + mode);
-        return true;
+    public boolean onModeChange(MODE nextMode) {
+        Log.v(this.getLocalClassName(), "onModeChange to " + nextMode);
+        return changePlayerFragment(nextMode);
     }
 
     @Override

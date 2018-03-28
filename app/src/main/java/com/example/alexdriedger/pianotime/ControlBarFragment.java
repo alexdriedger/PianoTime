@@ -84,18 +84,17 @@ public class ControlBarFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.v("ControlBarFragment", "Mode button clicked");
+
+                // Determine next mode
                 SoundActivity.MODE nextMode;
-                if (mMode == SoundActivity.MODE.KEYBOARD) {
-                    nextMode = SoundActivity.MODE.SOUNDPAD;
-                } else if (mMode == SoundActivity.MODE.SOUNDPAD) {
-                    nextMode = SoundActivity.MODE.KEYBOARD;
-                } else {
-                    throw new RuntimeException("Unsupported mode: " + mMode);
+                switch (mMode) {
+                    case KEYBOARD: nextMode = SoundActivity.MODE.SOUNDPAD; break;
+                    case SOUNDPAD: nextMode = SoundActivity.MODE.KEYBOARD; break;
+                    default: throw new RuntimeException("ControlBarFragment: Invalid nextMode: " + mMode);
                 }
 
                 if (mListener != null && mListener.onModeChange(nextMode)) {
-                    // TODO : CHANGE BUTTON TEXT SINCE THERE IS NEW STATE
-                    mMode = nextMode;
+                    onModeChange(nextMode);
                 }
             }
         });
@@ -129,12 +128,27 @@ public class ControlBarFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnControlInteractionListener {
-        boolean onModeChange(SoundActivity.MODE mode);
+        boolean onModeChange(SoundActivity.MODE nextMode);
         boolean onStartRecording();
         boolean onStopRecording();
         boolean onPlayRecording();
         boolean onClearRecording();
         void onSetInstrument(int channel, int instrument);
         void onChangeOctave(int channel, int base);
+    }
+
+    private void onModeChange(SoundActivity.MODE nextMode) {
+        this.mMode = nextMode;
+
+        // Change button text
+        int buttonRes;
+        switch (nextMode) {
+            case KEYBOARD: buttonRes = R.string.mode_button_soundpad; break;
+            case SOUNDPAD: buttonRes = R.string.mode_button_keyboard; break;
+            default: throw new RuntimeException("ControlBarFragment: Invalid nextMode: " + nextMode);
+        }
+
+        final Button button = getView().findViewById(R.id.change_mode_button);
+        button.setText(buttonRes);
     }
 }
