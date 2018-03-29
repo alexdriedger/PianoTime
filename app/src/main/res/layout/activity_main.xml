@@ -13,12 +13,6 @@
         android:text="Keyboard" />
 
     <Button
-        android:id="@+id/button_to_soundboard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sound Board"/>
-
-    <Button
         android:id="@+id/button_to_music_player"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
