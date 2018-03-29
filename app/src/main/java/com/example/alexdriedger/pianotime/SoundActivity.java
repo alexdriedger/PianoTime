@@ -28,7 +28,7 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
     }
 
     private Mixer mMixer;
-    private MODE mMode; // TODO : ADD MODE SUPPORT
+    private MODE mMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

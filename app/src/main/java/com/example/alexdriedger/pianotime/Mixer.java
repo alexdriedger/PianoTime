@@ -25,7 +25,7 @@ public class Mixer {
     private static MediaPlayer mMediaPlayer;
 
 
-    // TODO : SINGLETON????
+    // TODO : SINGLETON???? NO. THE MIDICONTROLLER SHOULD BE THE ONLY SINGLETON OBJECT IN HERE
     private Mixer() {
         mMidiEncoder = new MidiEncoder();
         mMidiController = MidiController.create();
