@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    android:id="@+id/recording_controls"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <ImageButton
+        android:id="@+id/control_button_new_layer"
+        android:src="@drawable/ic_add_black_24dp"
+        style="@style/ControlButton"/>
+
+    <ImageButton
+        android:id="@+id/control_button_delete"
+        android:src="@drawable/ic_delete_black_24dp"
+        style="@style/ControlButton" />
+
+    <ImageButton
+        android:id="@+id/control_button_play_pause"
+        android:src="@drawable/ic_play_circle_outline_black_24dp"
+        style="@style/ControlButton" />
+
+    <ImageButton
+        android:id="@+id/control_button_checkmark"
+        android:src="@drawable/ic_check_black_24dp"
+        style="@style/ControlButton" />
+
+</LinearLayout>

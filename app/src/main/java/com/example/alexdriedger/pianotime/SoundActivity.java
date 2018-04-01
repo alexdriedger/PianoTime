@@ -1,19 +1,11 @@
 package com.example.alexdriedger.pianotime;
 
-import android.content.pm.ActivityInfo;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-
-import com.leff.midi.event.ProgramChange;
-
-import java.security.Key;
 
 public class SoundActivity extends FragmentActivity implements ControlBarFragment.OnControlInteractionListener{
 
@@ -40,55 +32,9 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
 
         mMode = DEFAULT_MODE;
 
-//        Button button = findViewById(R.id.switch_to_keyboard);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                mMixer.startRecording();
-//                initModeKeyboard();
-//            }
-//        });
-//
-//        button = findViewById(R.id.switch_to_soundpad);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                mMixer.playRecording(getApplicationContext());
-//                initModeSoundpad();
-//            }
-//        });
-//
-//        button = findViewById(R.id.start_record_button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mMixer.startRecording();
-//
-//                // TODO : REMOVE THIS, IT IS SUPER SKETCH
-//                if (mMode == MODE.SOUNDPAD) {
-//                    initModeSoundpad();
-//                }
-//            }
-//        });
-//
-//        button = findViewById(R.id.play_recording_button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mMixer.stopRecording();
-//                mMixer.playRecording(getApplicationContext());
-//                mMixer.newTrack();
-//            }
-//        });
-
-        // TODO : FRAGMENT TRANSITIONS
         initControlBar();
         changePlayerFragment(DEFAULT_MODE);
 
-
-
-//        SoundPadFragment soundPadFragment = new SoundPadFragment();
-//        fragmentTransaction.add(R.id.sound_activity_main_area, soundPadFragment);
 
     }
 
@@ -101,7 +47,7 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
             return;
         }
 
-        ControlBarFragment cbf = ControlBarFragment.newInstance(mMode, false);
+        ControlBarFragment cbf = ControlBarFragment.newInstance(mMode);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.control_bar_fragment, cbf, CONTROL_BAR_FRAG_TAG);
         fragmentTransaction.commit();
@@ -110,6 +56,9 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
 
     /**
      * Changes mode.
+     *
+     * TODO : FRAGMENT TRANSITIONS
+     *
      * @param nextMode mode to change to.
      * @return true on success. False otherwise
      */
@@ -213,22 +162,22 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
 
     @Override
     public boolean onStartRecording() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean onStopRecording() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean onPlayRecording() {
-        return false;
+        return true;
     }
 
     @Override
-    public boolean onClearRecording() {
-        return false;
+    public boolean onDeleteTrack() {
+        return true;
     }
 
     @Override
@@ -239,5 +188,15 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
     @Override
     public void onChangeOctave(int channel, int base) {
 
+    }
+
+    @Override
+    public boolean onExportRecording() {
+        return true;
+    }
+
+    @Override
+    public boolean onStopPlayback() {
+        return true;
     }
 }
