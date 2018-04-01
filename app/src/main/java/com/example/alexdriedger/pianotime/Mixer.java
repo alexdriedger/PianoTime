@@ -64,6 +64,14 @@ public class Mixer {
         mMidiController.release();
     }
 
+    public int getCurrentTrack() {
+        return mMidiEncoder.getCurrentTrack();
+    }
+
+    public static boolean isRecording() {
+        return mIsRecording;
+    }
+
     public void startRecording() {
         mIsRecording = true;
         mRecordingStartTime = System.currentTimeMillis();

@@ -1,7 +1,7 @@
 package com.example.alexdriedger.pianotime;
 
 import android.content.Context;
-import android.net.Uri;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 
 /**
@@ -24,9 +25,17 @@ public class ControlBarFragment extends Fragment {
     private static final String ARG_MODE = "MODE";
     private static final String ARG_IS_RECORDING = "IS_RECORDING";
 
+    private enum RECORDING_STATE {
+        NO_RECORDING,
+        IDLE,
+        ACTIVE_RECORDING,
+        PLAYBACK_RECORDING,
+    }
 
+
+    private RECORDING_STATE mRecordingState;
     private SoundActivity.MODE mMode;
-    private boolean isRecording;
+    private boolean isRecording; // TODO : CHANGE TO RECORDING STATE
 
     private OnControlInteractionListener mListener;
 
@@ -39,15 +48,13 @@ public class ControlBarFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param mode the fragment is in. Should be one of KEYBOARD or SOUNDPAD
-     * @param isRecording whether the fragment should be recording
      * @return A new instance of fragment ControlBarFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ControlBarFragment newInstance(SoundActivity.MODE mode, boolean isRecording) {
+    public static ControlBarFragment newInstance(SoundActivity.MODE mode) {
         ControlBarFragment fragment = new ControlBarFragment();
         Bundle args = new Bundle();
         args.putString(ARG_MODE, mode.toString());
-        args.putBoolean(ARG_IS_RECORDING, isRecording);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,6 +73,8 @@ public class ControlBarFragment extends Fragment {
 
             isRecording = getArguments().getBoolean(ARG_IS_RECORDING);
         }
+        //  TODO : PUT THIS IN THE ARGUMENTS PASSED IN BUNDLE
+        mRecordingState = RECORDING_STATE.NO_RECORDING;
     }
 
     @Override
@@ -74,11 +83,11 @@ public class ControlBarFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_control_bar, container, false);
         initButtonListeners(v);
+        setButtonVisibilities(v);
         return v;
     }
 
     private void initButtonListeners(View v) {
-        // TODO : MAKE BUTTON TEXT STRINGS INTO STRING RESOURCES
         final Button modeButton = v.findViewById(R.id.change_mode_button);
         modeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +107,118 @@ public class ControlBarFragment extends Fragment {
                 }
             }
         });
+
+        final Button recordButton = v.findViewById(R.id.start_record_mode_button);
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRecordingState = RECORDING_STATE.IDLE;
+                setButtonVisibilities();
+            }
+        });
+
+        final ImageButton newLayerButton = v.findViewById(R.id.control_button_new_layer);
+        newLayerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null && mListener.onStartRecording()) {
+                    mRecordingState = RECORDING_STATE.ACTIVE_RECORDING;
+                    setButtonVisibilities();
+                }
+            }
+        });
+
+        final ImageButton deleteLayerButton = v.findViewById(R.id.control_button_delete);
+        deleteLayerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null) {
+                    mListener.onDeleteTrack();
+                }
+            }
+        });
+
+        final ImageButton playbackRecordingButton = v.findViewById(R.id.control_button_play_pause);
+        playbackRecordingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null && mListener.onPlayRecording()) {
+                    mRecordingState = RECORDING_STATE.PLAYBACK_RECORDING;
+                    setButtonVisibilities();
+                }
+            }
+        });
+
+        final ImageButton confirmButton = v.findViewById(R.id.control_button_checkmark);
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (mRecordingState) {
+                    case IDLE: {
+                        if (mListener != null && mListener.onExportRecording()) {
+                            mRecordingState = RECORDING_STATE.NO_RECORDING;
+                            setButtonVisibilities();
+                        }
+                        break;
+                    }
+                    case ACTIVE_RECORDING: {
+                        if (mListener != null && mListener.onStopRecording()) {
+                            mRecordingState = RECORDING_STATE.IDLE;
+                            setButtonVisibilities();
+                        }
+                        break;
+                    }
+
+                    case PLAYBACK_RECORDING: {
+                        if (mListener != null && mListener.onStopPlayback()) {
+                            mRecordingState = RECORDING_STATE.IDLE;
+                            setButtonVisibilities();
+                        }
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
+    private void setButtonVisibilities() {
+        setButtonVisibilities(getView());
+    }
+
+    /**
+     * Sets visibilities on buttons based on current state.
+     * This method must be called OnCreateView instead of setButtonVisibilities() because getView
+     * will fail in OnCreateView
+     * @param v parent view of control bar
+     */
+    private void setButtonVisibilities(View v) {
+        switch (mRecordingState) {
+            case NO_RECORDING: {
+                v.findViewById(R.id.start_record_mode_button).setVisibility(View.VISIBLE);
+                v.findViewById(R.id.recording_controls).setVisibility(View.GONE);
+                break;
+            }
+            case IDLE: {
+                v.findViewById(R.id.start_record_mode_button).setVisibility(View.GONE);
+                v.findViewById(R.id.recording_controls).setVisibility(View.VISIBLE);
+                v.findViewById(R.id.control_button_new_layer).setVisibility(View.VISIBLE);
+                v.findViewById(R.id.control_button_delete).setVisibility(View.VISIBLE);
+                v.findViewById(R.id.control_button_play_pause).setVisibility(View.VISIBLE);
+                v.findViewById(R.id.control_button_checkmark).setVisibility(View.VISIBLE);
+                break;
+            }
+            case PLAYBACK_RECORDING:
+            case ACTIVE_RECORDING: {
+                v.findViewById(R.id.start_record_mode_button).setVisibility(View.GONE);
+                v.findViewById(R.id.recording_controls).setVisibility(View.VISIBLE);
+                v.findViewById(R.id.control_button_new_layer).setVisibility(View.GONE);
+                v.findViewById(R.id.control_button_delete).setVisibility(View.GONE);
+                v.findViewById(R.id.control_button_play_pause).setVisibility(View.GONE);
+                v.findViewById(R.id.control_button_checkmark).setVisibility(View.VISIBLE);
+                break;
+            }
+            default: throw new RuntimeException("ControlBarFragment. Invalid recording state: " + mRecordingState);
+        }
     }
 
     @Override
@@ -132,7 +253,9 @@ public class ControlBarFragment extends Fragment {
         boolean onStartRecording();
         boolean onStopRecording();
         boolean onPlayRecording();
-        boolean onClearRecording();
+        boolean onStopPlayback();
+        boolean onDeleteTrack();
+        boolean onExportRecording();
         void onSetInstrument(int channel, int instrument);
         void onChangeOctave(int channel, int base);
     }

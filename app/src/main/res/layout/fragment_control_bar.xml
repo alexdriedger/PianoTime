@@ -3,25 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ControlBarFragment">
+    tools:context=".ControlBarFragment"
+    style="@style/Base.Widget.AppCompat.ButtonBar"
+    android:background="@color/colorPrimary"
+    android:gravity="center_vertical">
 
     <Button
         android:id="@+id/change_mode_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/mode_button_soundpad" />
+        android:text="@string/mode_button_soundpad"
+        style="@style/Base.Widget.AppCompat.Button.Colored"/>
 
     <Button
-        android:id="@+id/start_record_button"
+        android:id="@+id/start_record_mode_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Record" />
+        android:text="Record"
+        style="@style/Base.Widget.AppCompat.Button.Colored"/>
 
-    <Button
-        android:id="@+id/play_recording_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Play Recording"/>
+    <include layout="@layout/recording_controls" />
 
 
 </LinearLayout>

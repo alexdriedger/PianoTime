@@ -47,7 +47,7 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
             return;
         }
 
-        ControlBarFragment cbf = ControlBarFragment.newInstance(mMode, false);
+        ControlBarFragment cbf = ControlBarFragment.newInstance(mMode);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.control_bar_fragment, cbf, CONTROL_BAR_FRAG_TAG);
         fragmentTransaction.commit();
@@ -162,22 +162,22 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
 
     @Override
     public boolean onStartRecording() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean onStopRecording() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean onPlayRecording() {
-        return false;
+        return true;
     }
 
     @Override
-    public boolean onClearRecording() {
-        return false;
+    public boolean onDeleteTrack() {
+        return true;
     }
 
     @Override
@@ -188,5 +188,15 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
     @Override
     public void onChangeOctave(int channel, int base) {
 
+    }
+
+    @Override
+    public boolean onExportRecording() {
+        return true;
+    }
+
+    @Override
+    public boolean onStopPlayback() {
+        return true;
     }
 }
