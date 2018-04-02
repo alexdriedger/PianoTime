@@ -24,11 +24,11 @@ public class Mixer {
     private static final int DEFAULT_VELOCITY = 127;
 
     // TODO : MAKE IT NOT A SINGLETON!!!!
-    private static MidiEncoder mMidiEncoder;
-    private static MidiController mMidiController;
-    private static boolean mIsRecording;
-    private static long mRecordingStartTime;
-    private static MediaPlayer mMediaPlayer;
+    private MidiEncoder mMidiEncoder;
+    private MidiController mMidiController;
+    private boolean mIsRecording;
+    private long mRecordingStartTime;
+    private MediaPlayer mMediaPlayer;
 
     private int baseKeyboardPos;
     private int[] soundPadPos;
@@ -36,7 +36,7 @@ public class Mixer {
 
 
     // TODO : SINGLETON???? NO. THE MIDICONTROLLER SHOULD BE THE ONLY SINGLETON OBJECT IN HERE
-    private Mixer() {
+    public Mixer() {
         mMidiEncoder = new MidiEncoder();
         mMidiController = MidiController.create();
         mIsRecording = false;
@@ -47,10 +47,6 @@ public class Mixer {
         keyboardInstrument = 41;
         soundPadPos = new int[] {55, 59, 60, 66, 67, 38, 39, 34, 35};
 
-    }
-
-    public static Mixer create() {
-        return new Mixer();
     }
 
     public void start() {
@@ -69,7 +65,7 @@ public class Mixer {
         return mMidiEncoder.getCurrentTrack();
     }
 
-    public static boolean isRecording() {
+    public boolean isRecording() {
         return mIsRecording;
     }
 
@@ -82,7 +78,7 @@ public class Mixer {
         mIsRecording = false;
     }
 
-    private static MidiEvent convertEvent(byte[] event) {
+    private MidiEvent convertEvent(byte[] event) {
         byte type = event[0];
         MidiEvent mEvent;
 
@@ -134,11 +130,11 @@ public class Mixer {
         }
     }
 
-    public static void processEvent(byte[] event) {
+    public void processEvent(byte[] event) {
         processEvent(convertEvent(event));
     }
 
-    public static void processEvent(MidiEvent event) {
+    public void processEvent(MidiEvent event) {
 
         // Write event to the synthesizer
         if (event instanceof NoteOn) {
@@ -191,7 +187,7 @@ public class Mixer {
 //                (Byte.compare(testByte, (byte) (compareTo + (byte) 0x10)) <= 0);
     }
 
-    private static long getCurrentMidiTime() {
+    private long getCurrentMidiTime() {
         return System.currentTimeMillis() - mRecordingStartTime;
     }
 
