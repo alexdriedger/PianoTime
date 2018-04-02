@@ -11,6 +11,7 @@ import com.leff.midi.event.NoteOn;
 import com.leff.midi.event.ProgramChange;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -43,8 +44,8 @@ public class Mixer {
         mMediaPlayer = null;
 
         baseKeyboardPos = 60; // Middle C
-        // TODO : INIT SOUND PAD POSITIONS
         keyboardInstrument = 41;
+        soundPadPos = new int[] {55, 59, 60, 66, 67, 38, 39, 34, 35};
 
     }
 
