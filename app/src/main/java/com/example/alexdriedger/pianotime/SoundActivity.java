@@ -6,8 +6,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
-public class SoundActivity extends FragmentActivity implements ControlBarFragment.OnControlInteractionListener{
+import com.leff.midi.event.NoteOff;
+import com.leff.midi.event.NoteOn;
+
+public class SoundActivity extends FragmentActivity
+        implements ControlBarFragment.OnControlInteractionListener,
+        KeyboardFragment.OnNotePressListener {
 
     private static final String LOG_TAG = "Sound Activity";
     private static final String KEYBOARD_FRAG_TAG = "KEYBOARD_FRAG";
@@ -35,7 +42,25 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
         initControlBar();
         changePlayerFragment(DEFAULT_MODE);
 
+//        percussionTest();
+    }
 
+    private void percussionTest() {
+        mMixer.startRecording();
+        for (int i = 34; i < 82; i++) {
+            int channel = 9;
+//            int pitch = 1 + i;
+            int velocity = 100;
+            long tick = (i * 480) - (40 * 480);
+//            long duration = 120;
+
+            NoteOn on = new NoteOn(tick, channel, i, velocity);
+            NoteOff off = new NoteOff(tick + 960, channel, i, 0);
+            Mixer.processEvent(on);
+            Mixer.processEvent(off);
+        }
+
+        mMixer.playRecording(getApplicationContext());
     }
 
     private void initControlBar() {
@@ -198,5 +223,10 @@ public class SoundActivity extends FragmentActivity implements ControlBarFragmen
     @Override
     public boolean onStopPlayback() {
         return true;
+    }
+
+    @Override
+    public void onTouch(boolean noteOn, int pos) {
+        mMixer.processEvent(noteOn, pos, mMode);
     }
 }

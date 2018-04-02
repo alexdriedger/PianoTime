@@ -5,6 +5,7 @@ import android.util.Log;
 import com.leff.midi.MidiFile;
 import com.leff.midi.MidiTrack;
 import com.leff.midi.event.MidiEvent;
+import com.leff.midi.event.ProgramChange;
 import com.leff.midi.event.meta.Tempo;
 import com.leff.midi.event.meta.TimeSignature;
 
@@ -12,7 +13,10 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Alex Driedger on 2018-03-16.
@@ -23,6 +27,7 @@ public class MidiEncoder {
     private static final int TEMPO_ONE_MILLI = 125;
 
     private List<MidiTrack> mTracks;
+    private Map<Integer, Integer> channels;
 
     public MidiEncoder() {
         this(getDefaultTimeSignature(), getDefaultTempo());
@@ -36,27 +41,27 @@ public class MidiEncoder {
         mt.insertEvent(tempo);
 
         mTracks.add(mt);
+
+//        channels = new int[16];
+//        Arrays.fill(channels, -1);
+
+        channels = new HashMap<>();
     }
 
     /**
      *
      * @param event to add to the encoder
      * @param trackNum The track number to add the event to.
-     *                 Must be 0 <= trackNum <= getNumTracks
+     *                 Must be 0 <= trackNum < getNumTracks
      * @return true if added successfully. False if there was an error
      */
     public boolean addEvent(MidiEvent event, int trackNum) {
-        if (trackNum < 0 || trackNum > mTracks.size()) {
+        if (trackNum < 0 || mTracks.size() <= trackNum) {
+            Log.d(this.getClass().getName(), "Could not add event");
             return false;
         }
 
-        // Add a new track
-        if (trackNum == getNumTracks()) {
-            mTracks.add(new MidiTrack());
-        }
-
         mTracks.get(trackNum).insertEvent(event);
-
         return true;
     }
 
@@ -95,6 +100,49 @@ public class MidiEncoder {
         }
 
         return true;
+    }
+
+    /**
+     * Returns the channel an instrument is on. Returns -1 if instrument is not on a channel
+     * @param instrument to check
+     * @return Returns the channel an instrument is on. Returns -1 if instrument is not on a channel
+     */
+    public int getChannel(int instrument) {
+        Integer channel = channels.get(instrument);
+        if (channel == null) {
+            return -1;
+        }
+        return channel;
+    }
+
+    /**
+     * Returns the next available channel
+     * @return Returns the next available channel. Returns -1 if all channels are full
+     */
+    public int getNextAvailableChannel() {
+        int size = channels.size();
+
+        // Percussion channel is not available for other instruments
+        if (size < 9) {
+            return size;
+        }
+        if (size >= 15) {
+            return -1;
+        }
+        return size + 1;
+    }
+
+    /**
+     * Sets a channel to certain instrument. Fails if there are no available channels
+     * @param instrument to set on the channel
+     */
+    public void setNextAvailableChannel(int instrument) {
+        int channel = getNextAvailableChannel();
+        if (channel == -1) {
+            return;
+        }
+        channels.put(instrument, channel);
+        addEvent(new ProgramChange(0, 0, instrument), 0);
     }
 
     /**
