@@ -11,6 +11,7 @@ import com.leff.midi.event.NoteOn;
 import com.leff.midi.event.ProgramChange;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  * Created by Alex Driedger on 2018-03-16.
@@ -18,11 +19,19 @@ import java.io.File;
 
 public class Mixer {
 
+    private static final int PERCUSSION_CHANNEL = 9;
+    private static final int DEFAULT_VELOCITY = 127;
+
+    // TODO : MAKE IT NOT A SINGLETON!!!!
     private static MidiEncoder mMidiEncoder;
     private static MidiController mMidiController;
     private static boolean mIsRecording;
     private static long mRecordingStartTime;
     private static MediaPlayer mMediaPlayer;
+
+    private int baseKeyboardPos;
+    private int[] soundPadPos;
+    private int keyboardInstrument;
 
 
     // TODO : SINGLETON???? NO. THE MIDICONTROLLER SHOULD BE THE ONLY SINGLETON OBJECT IN HERE
@@ -33,6 +42,10 @@ public class Mixer {
         mRecordingStartTime = System.currentTimeMillis(); // Default value, no not rely on this
         mMediaPlayer = null;
 
+        baseKeyboardPos = 60; // Middle C
+        // TODO : INIT SOUND PAD POSITIONS
+        keyboardInstrument = 41;
+
     }
 
     public static Mixer create() {
@@ -41,19 +54,6 @@ public class Mixer {
 
     public void start() {
         mMidiController.start();
-
-//        // Change instruments
-//        // TODO : FIGURE OUT WHY THESE DON'T WORK
-//        MidiController.changeInstrument((byte) 0x70, (byte) 0x01);
-//        MidiController.changeInstrument((byte) 0x71, (byte) 0x02);
-//        MidiController.changeInstrument((byte) 0x78, (byte) 0x03);
-//        MidiController.changeInstrument((byte) 0x77, (byte) 0x04);
-//        MidiController.changeInstrument((byte) 0x72, (byte) 0x05);
-//        MidiController.changeInstrument((byte) 0x73, (byte) 0x06);
-//        MidiController.changeInstrument((byte) 0x74, (byte) 0x07);
-//        MidiController.changeInstrument((byte) 0x75, (byte) 0x08);
-//        MidiController.changeInstrument((byte) 0x76, (byte) 0x09);
-
     }
 
     public void stop() {
@@ -101,23 +101,40 @@ public class Mixer {
         return null;
     }
 
+    /**
+     * Return true if there are enough channels left to record
+     * @return Return true if there are enough channels left to record. False otherwise
+     */
+    public boolean canRecord() {
+        return mMidiEncoder.getNextAvailableChannel() != -1;
+    }
+
+    private int getChannel(SoundActivity.MODE mode) {
+        if (mode == SoundActivity.MODE.SOUNDPAD) {
+            return PERCUSSION_CHANNEL;
+        }
+        if (!mIsRecording) {
+            return 0;
+        } else {
+            int channel = mMidiEncoder.getChannel(keyboardInstrument);
+            if (channel < 0) {
+                channel = mMidiEncoder.getNextAvailableChannel();
+                mMidiEncoder.setNextAvailableChannel(keyboardInstrument);
+            }
+            return channel;
+        }
+    }
+
+    private int getActualPosition(int rawPos, SoundActivity.MODE mode) {
+        switch(mode) {
+            case KEYBOARD: return rawPos + baseKeyboardPos;
+            case SOUNDPAD: return soundPadPos[rawPos];
+            default: throw new RuntimeException(this.getClass().getName() + " : Invalid mode : " + mode);
+        }
+    }
+
     public static void processEvent(byte[] event) {
-
         processEvent(convertEvent(event));
-
-//        byte type = event[0];
-//
-//        if (isType(type, MidiController.NOTE_ON)) {
-//            MidiController.playNote((byte) (event[0] | 0x01), event[1], event[2]);
-//        } else if (isType(type, MidiController.NOTE_OFF)) {
-//            MidiController.stopNote((byte) (event[0] | 0x01), event[1]);
-//        } else if (isType(type, MidiController.CHANGE_INSTRUMENT)) {
-//            MidiController.changeInstrument(event[1], (byte) (event[0] | 0x01);
-//        }
-//
-//        if (mIsRecording) {
-//            mMidiEncoder.addEvent()
-//        }
     }
 
     public static void processEvent(MidiEvent event) {
@@ -131,8 +148,28 @@ public class Mixer {
             MidiController.changeInstrument((ProgramChange) event);
         }
 
-        if (mIsRecording || event instanceof ProgramChange) {
+        if (mIsRecording) {
             mMidiEncoder.addEvent(event, mMidiEncoder.getCurrentTrack());
+        }
+    }
+
+    /**
+     * Used to process note on and note off messages
+     * @param noteOn true if note on. false if note off
+     * @param pos raw position of key press
+     * @param mode one of SoundActivity.MODE
+     */
+    public void processEvent(boolean noteOn, int pos, SoundActivity.MODE mode) {
+        MidiEvent event;
+        long tick = getCurrentMidiTime();
+        int channel = getChannel(mode); // Handles updating channels if recording
+        int note = getActualPosition(pos, mode);
+        int velocity = DEFAULT_VELOCITY;
+
+        if (noteOn) {
+            processEvent(new NoteOn(tick, channel, note, velocity));
+        } else {
+            processEvent(new NoteOff(tick, channel, note, 0));
         }
     }
 
