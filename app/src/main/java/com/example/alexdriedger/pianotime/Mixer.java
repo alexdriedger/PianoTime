@@ -47,6 +47,16 @@ public class Mixer {
 
     }
 
+    public void initMode(SoundActivity.MODE mode) {
+        switch (mode) {
+            case KEYBOARD: {
+                processEvent(generateProgramChangeEvent(0, mKeyboardInstrument));
+                break;
+            }
+            case SOUNDPAD: break;
+        }
+    }
+
     public void start() {
         mMidiController.start();
     }
@@ -105,7 +115,12 @@ public class Mixer {
         return mMidiEncoder.getNextAvailableChannel() != -1;
     }
 
-    private int getChannel(SoundActivity.MODE mode) {
+    /**
+     * Sets the channel for the current selected instrument
+     * @param mode on of MODE
+     * @return the channel that was set
+     */
+    private int setChannel(SoundActivity.MODE mode) {
         if (mode == SoundActivity.MODE.SOUNDPAD) {
             return PERCUSSION_CHANNEL;
         }
@@ -116,6 +131,27 @@ public class Mixer {
             if (channel < 0) {
                 channel = mMidiEncoder.getNextAvailableChannel();
                 mMidiEncoder.setNextAvailableChannel(mKeyboardInstrument);
+                processEvent(generateProgramChangeEvent(channel, mKeyboardInstrument));
+            }
+            return channel;
+        }
+    }
+
+    /**
+     * Gets the channel for the current selected instrument.
+     * @param mode one of MODE
+     * @return channel for the current selected instrument.
+     */
+    private int getChannel(SoundActivity.MODE mode) {
+        if (mode == SoundActivity.MODE.SOUNDPAD) {
+            return PERCUSSION_CHANNEL;
+        }
+        if (!mIsRecording) {
+            return 0;
+        } else {
+            int channel = mMidiEncoder.getChannel(mKeyboardInstrument);
+            if (channel < 0) {
+                channel = mMidiEncoder.getNextAvailableChannel();
             }
             return channel;
         }
@@ -160,7 +196,7 @@ public class Mixer {
     public void processEvent(boolean noteOn, int pos, SoundActivity.MODE mode) {
         MidiEvent event;
         long tick = getCurrentMidiTime();
-        int channel = getChannel(mode); // Handles updating channels if recording
+        int channel = setChannel(mode); // Handles updating channels if recording
         int note = getActualPosition(pos, mode);
         int velocity = DEFAULT_VELOCITY;
 
@@ -282,5 +318,11 @@ public class Mixer {
      */
     public void deleteTrack() {
         mMidiEncoder.removeTrack(mMidiEncoder.getCurrentTrack());
+    }
+
+    public void setKeyboardInstrument(int i) {
+        // TODO : CHECK FOR OUT OF BOUNDS
+        mKeyboardInstrument = i;
+        processEvent(generateProgramChangeEvent(setChannel(SoundActivity.MODE.KEYBOARD), mKeyboardInstrument));
     }
 }

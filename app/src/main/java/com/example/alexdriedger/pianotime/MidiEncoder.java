@@ -151,7 +151,7 @@ public class MidiEncoder {
             return;
         }
         channels.put(instrument, channel);
-        addEvent(new ProgramChange(0, 0, instrument), getCurrentTrack());
+        addEvent(new ProgramChange(0, channel, instrument), getCurrentTrack());
     }
 
     /**

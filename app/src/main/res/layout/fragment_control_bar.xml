@@ -24,5 +24,11 @@
 
     <include layout="@layout/recording_controls" />
 
+    <Spinner
+        android:id="@+id/change_instrument_button"
+        android:layout_width="wrap_content"
+        android:spinnerMode="dialog"
+        style="@style/ControlButton"/>
+
 
 </LinearLayout>
