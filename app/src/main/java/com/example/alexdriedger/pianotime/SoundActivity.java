@@ -34,7 +34,7 @@ public class SoundActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sound);
 
-        mMixer = Mixer.create();
+        mMixer = new Mixer();
         mMixer.start();
 
         mMode = DEFAULT_MODE;
@@ -56,8 +56,8 @@ public class SoundActivity extends FragmentActivity
 
             NoteOn on = new NoteOn(tick, channel, i, velocity);
             NoteOff off = new NoteOff(tick + 960, channel, i, 0);
-            Mixer.processEvent(on);
-            Mixer.processEvent(off);
+            mMixer.processEvent(on);
+            mMixer.processEvent(off);
         }
 
         mMixer.playRecording(getApplicationContext());
@@ -144,13 +144,13 @@ public class SoundActivity extends FragmentActivity
 
     private void initModeKeyboard() {
         // Change instrument
-        Mixer.processEvent(mMixer.generateProgramChangeEvent(0, 8));
+        mMixer.processEvent(mMixer.generateProgramChangeEvent(0, 8));
     }
 
     private void initModeSoundpad() {
         // Initialize instruments
         for (int i = 1; i < 10; i++) {
-            Mixer.processEvent(mMixer.generateProgramChangeEvent(i, 111 + i));
+            mMixer.processEvent(mMixer.generateProgramChangeEvent(i, 111 + i));
         }
 
     }
@@ -159,7 +159,7 @@ public class SoundActivity extends FragmentActivity
     protected void onStart() {
         super.onStart();
         if (mMixer == null) {
-            mMixer = Mixer.create();
+            mMixer = new Mixer();
         }
     }
 
