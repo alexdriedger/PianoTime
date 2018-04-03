@@ -157,6 +157,7 @@ public class ControlBarFragment extends Fragment {
                     case IDLE: {
                         if (mListener != null && mListener.onExportRecording()) {
                             mRecordingState = RECORDING_STATE.NO_RECORDING;
+                            mListener.onFinishRecording();
                             setButtonVisibilities();
                         }
                         break;
@@ -256,6 +257,7 @@ public class ControlBarFragment extends Fragment {
         boolean onStopPlayback();
         boolean onDeleteTrack();
         boolean onExportRecording();
+        void onFinishRecording();
         void onSetInstrument(int channel, int instrument);
         void onChangeOctave(int channel, int base);
     }

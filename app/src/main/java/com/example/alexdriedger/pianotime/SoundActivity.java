@@ -6,11 +6,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
+import android.widget.Toast;
 
 import com.leff.midi.event.NoteOff;
 import com.leff.midi.event.NoteOn;
+
+import java.io.File;
+import java.nio.file.Files;
 
 public class SoundActivity extends FragmentActivity
         implements ControlBarFragment.OnControlInteractionListener,
@@ -60,7 +62,7 @@ public class SoundActivity extends FragmentActivity
             mMixer.processEvent(off);
         }
 
-        mMixer.playRecording(getApplicationContext());
+        mMixer.startPlaybackRecording(getApplicationContext());
     }
 
     private void initControlBar() {
@@ -134,26 +136,25 @@ public class SoundActivity extends FragmentActivity
         ft.commit();
 
         mMode = nextMode;
-        switch (nextMode) {
-            case KEYBOARD: initModeKeyboard(); break;
-            case SOUNDPAD: initModeSoundpad(); break;
-        }
+        initMode(nextMode);
 
         return true;
     }
+
+    private void initMode(MODE mode) {
+        switch (mode) {
+            case KEYBOARD: initModeKeyboard(); break;
+            case SOUNDPAD: initModeSoundpad(); break;
+        }
+    }
+
 
     private void initModeKeyboard() {
         // Change instrument
         mMixer.processEvent(mMixer.generateProgramChangeEvent(0, 8));
     }
 
-    private void initModeSoundpad() {
-        // Initialize instruments
-        for (int i = 1; i < 10; i++) {
-            mMixer.processEvent(mMixer.generateProgramChangeEvent(i, 111 + i));
-        }
-
-    }
+    private void initModeSoundpad() {}
 
     @Override
     protected void onStart() {
@@ -167,8 +168,7 @@ public class SoundActivity extends FragmentActivity
     protected void onResume() {
         super.onResume();
         mMixer.start();
-
-        // TODO : REINITIALIZE INSTRUMENT SELECTIONS
+        initMode(mMode);
     }
 
     @Override
@@ -187,21 +187,38 @@ public class SoundActivity extends FragmentActivity
 
     @Override
     public boolean onStartRecording() {
+        if (!mMixer.canRecord()) {
+            Toast.makeText(getApplicationContext(), "Midi file is full. You should export it!", Toast.LENGTH_LONG);
+        }
+        mMixer.exportRecording(getApplicationContext());
+        mMixer.startPlaybackRecording(getApplicationContext());
+        mMixer.startRecording();
         return true;
     }
 
     @Override
     public boolean onStopRecording() {
+        mMixer.stopRecording();
+        mMixer.stopRecordingPlayback();
         return true;
     }
 
     @Override
     public boolean onPlayRecording() {
+        mMixer.exportRecording(getApplicationContext());
+        mMixer.startPlaybackRecording(getApplicationContext());
+        return true;
+    }
+
+    @Override
+    public boolean onStopPlayback() {
+        mMixer.stopRecordingPlayback();
         return true;
     }
 
     @Override
     public boolean onDeleteTrack() {
+        mMixer.deleteTrack();
         return true;
     }
 
@@ -217,12 +234,17 @@ public class SoundActivity extends FragmentActivity
 
     @Override
     public boolean onExportRecording() {
+        mMixer.exportRecording(getApplicationContext(), "mixtape_" + System.currentTimeMillis());
+//        File[] files = getFilesDir().listFiles();
+//        for (File f : files) {
+//            Log.d(this.getClass().getName(), "File: " + f.getName());
+//        }
         return true;
     }
 
     @Override
-    public boolean onStopPlayback() {
-        return true;
+    public void onFinishRecording() {
+        mMixer.flushRecording();
     }
 
     @Override

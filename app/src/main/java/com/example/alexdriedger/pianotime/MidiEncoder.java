@@ -66,11 +66,20 @@ public class MidiEncoder {
     }
 
     /**
-     * Removes track if it exists
+     * Removes track if it exists. 0 < track < number of tracks. Track 0 cannot be removed
      * @param track number to remove
      */
     public void removeTrack(int track) {
-        if (0 <= track && track < mTracks.size()) {
+        if (0 < track && track < mTracks.size()) {
+            MidiTrack t = mTracks.get(track);
+            for (MidiEvent m : t.getEvents()) {
+                if (m instanceof ProgramChange) {
+                    // Track has the instance of a instrument assignment on a channel
+                    // Allows for the instrument to be assigned to a channel again
+                    channels.remove(((ProgramChange) m).getProgramNumber());
+                }
+            }
+
             mTracks.remove(track);
         }
     }
@@ -142,7 +151,7 @@ public class MidiEncoder {
             return;
         }
         channels.put(instrument, channel);
-        addEvent(new ProgramChange(0, 0, instrument), 0);
+        addEvent(new ProgramChange(0, 0, instrument), getCurrentTrack());
     }
 
     /**
