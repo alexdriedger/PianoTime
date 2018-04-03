@@ -133,13 +133,18 @@ public class SoundActivity extends FragmentActivity
         ft.commit();
 
         mMode = nextMode;
-        switch (nextMode) {
-            case KEYBOARD: initModeKeyboard(); break;
-            case SOUNDPAD: initModeSoundpad(); break;
-        }
+        initMode(nextMode);
 
         return true;
     }
+
+    private void initMode(MODE mode) {
+        switch (mode) {
+            case KEYBOARD: initModeKeyboard(); break;
+            case SOUNDPAD: initModeSoundpad(); break;
+        }
+    }
+
 
     private void initModeKeyboard() {
         // Change instrument
@@ -160,8 +165,7 @@ public class SoundActivity extends FragmentActivity
     protected void onResume() {
         super.onResume();
         mMixer.start();
-
-        // TODO : REINITIALIZE INSTRUMENT SELECTIONS
+        initMode(mMode);
     }
 
     @Override
@@ -211,6 +215,7 @@ public class SoundActivity extends FragmentActivity
 
     @Override
     public boolean onDeleteTrack() {
+        mMixer.deleteTrack();
         return true;
     }
 

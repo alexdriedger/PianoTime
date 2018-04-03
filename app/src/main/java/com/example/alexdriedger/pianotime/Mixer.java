@@ -276,4 +276,11 @@ public class Mixer {
         mIsRecording = false;
         mMidiEncoder = new MidiEncoder();
     }
+
+    /**
+     * Deletes most recent track
+     */
+    public void deleteTrack() {
+        mMidiEncoder.removeTrack(mMidiEncoder.getCurrentTrack());
+    }
 }
