@@ -11,6 +11,9 @@ import android.widget.Toast;
 import com.leff.midi.event.NoteOff;
 import com.leff.midi.event.NoteOn;
 
+import java.io.File;
+import java.nio.file.Files;
+
 public class SoundActivity extends FragmentActivity
         implements ControlBarFragment.OnControlInteractionListener,
         KeyboardFragment.OnNotePressListener {
@@ -231,6 +234,11 @@ public class SoundActivity extends FragmentActivity
 
     @Override
     public boolean onExportRecording() {
+        mMixer.exportRecording(getApplicationContext(), "mixtape_" + System.currentTimeMillis());
+//        File[] files = getFilesDir().listFiles();
+//        for (File f : files) {
+//            Log.d(this.getClass().getName(), "File: " + f.getName());
+//        }
         return true;
     }
 
