@@ -8,8 +8,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Spinner;
+
+import com.leff.midi.event.ProgramChange;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -180,6 +188,34 @@ public class ControlBarFragment extends Fragment {
                 }
             }
         });
+
+        final Spinner instrumentSpinner = v.findViewById(R.id.change_instrument_button);
+        instrumentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(this.getClass().getName(), "Item selected: " + i);
+                mListener.onSetInstrument(mMode, i, 0);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.keyboard_instruments, android.R.layout.simple_spinner_item);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        instrumentSpinner.setAdapter(dataAdapter);
+
+
+//        final Button setInstrumentButton = v.findViewById(R.id.change_instrument_button);
+//        setInstrumentButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
     }
 
     private void setButtonVisibilities() {
@@ -258,8 +294,8 @@ public class ControlBarFragment extends Fragment {
         boolean onDeleteTrack();
         boolean onExportRecording();
         void onFinishRecording();
-        void onSetInstrument(int channel, int instrument);
-        void onChangeOctave(int channel, int base);
+        void onSetInstrument(SoundActivity.MODE mode, int instrument, int pos);
+        void onChangeOctave(int base);
     }
 
     private void onModeChange(SoundActivity.MODE nextMode) {

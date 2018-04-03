@@ -136,26 +136,11 @@ public class SoundActivity extends FragmentActivity
         ft.commit();
 
         mMode = nextMode;
-        initMode(nextMode);
+        mMixer.initMode(nextMode);
 
         return true;
     }
-
-    private void initMode(MODE mode) {
-        switch (mode) {
-            case KEYBOARD: initModeKeyboard(); break;
-            case SOUNDPAD: initModeSoundpad(); break;
-        }
-    }
-
-
-    private void initModeKeyboard() {
-        // Change instrument
-        mMixer.processEvent(mMixer.generateProgramChangeEvent(0, 8));
-    }
-
-    private void initModeSoundpad() {}
-
+    
     @Override
     protected void onStart() {
         super.onStart();
@@ -168,7 +153,7 @@ public class SoundActivity extends FragmentActivity
     protected void onResume() {
         super.onResume();
         mMixer.start();
-        initMode(mMode);
+        mMixer.initMode(mMode);
     }
 
     @Override
@@ -223,12 +208,13 @@ public class SoundActivity extends FragmentActivity
     }
 
     @Override
-    public void onSetInstrument(int channel, int instrument) {
-
+    public void onSetInstrument(MODE mode, int instrument, int pos) {
+        // TODO : SOUNDPAD
+        mMixer.setKeyboardInstrument(instrument);
     }
 
     @Override
-    public void onChangeOctave(int channel, int base) {
+    public void onChangeOctave(int base) {
 
     }
 

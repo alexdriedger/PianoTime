@@ -47,6 +47,16 @@ public class Mixer {
 
     }
 
+    public void initMode(SoundActivity.MODE mode) {
+        switch (mode) {
+            case KEYBOARD: {
+                processEvent(generateProgramChangeEvent(0, mKeyboardInstrument));
+                break;
+            }
+            case SOUNDPAD: break;
+        }
+    }
+
     public void start() {
         mMidiController.start();
     }
@@ -282,5 +292,11 @@ public class Mixer {
      */
     public void deleteTrack() {
         mMidiEncoder.removeTrack(mMidiEncoder.getCurrentTrack());
+    }
+
+    public void setKeyboardInstrument(int i) {
+        // TODO : CHECK FOR OUT OF BOUNDS
+        mKeyboardInstrument = i;
+        processEvent(generateProgramChangeEvent(0, mKeyboardInstrument));
     }
 }
