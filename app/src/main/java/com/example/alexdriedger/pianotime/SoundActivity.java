@@ -6,8 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.leff.midi.event.NoteOff;
 import com.leff.midi.event.NoteOn;
@@ -60,7 +58,7 @@ public class SoundActivity extends FragmentActivity
             mMixer.processEvent(off);
         }
 
-        mMixer.playRecording(getApplicationContext());
+        mMixer.startPlaybackRecording(getApplicationContext());
     }
 
     private void initControlBar() {
@@ -147,13 +145,7 @@ public class SoundActivity extends FragmentActivity
         mMixer.processEvent(mMixer.generateProgramChangeEvent(0, 8));
     }
 
-    private void initModeSoundpad() {
-        // Initialize instruments
-        for (int i = 1; i < 10; i++) {
-            mMixer.processEvent(mMixer.generateProgramChangeEvent(i, 111 + i));
-        }
-
-    }
+    private void initModeSoundpad() {}
 
     @Override
     protected void onStart() {
@@ -187,11 +179,16 @@ public class SoundActivity extends FragmentActivity
 
     @Override
     public boolean onStartRecording() {
+        mMixer.startRecording();
+        mMixer.exportRecording(getApplicationContext());
+        mMixer.startPlaybackRecording(getApplicationContext());
         return true;
     }
 
     @Override
     public boolean onStopRecording() {
+        mMixer.stopRecording();
+        mMixer.stopRecordingPlayback();
         return true;
     }
 
