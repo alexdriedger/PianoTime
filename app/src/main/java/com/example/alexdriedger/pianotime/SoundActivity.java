@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.leff.midi.event.NoteOff;
 import com.leff.midi.event.NoteOn;
@@ -179,9 +180,12 @@ public class SoundActivity extends FragmentActivity
 
     @Override
     public boolean onStartRecording() {
-        mMixer.startRecording();
+        if (!mMixer.canRecord()) {
+            Toast.makeText(getApplicationContext(), "Midi file is full. You should export it!", Toast.LENGTH_LONG);
+        }
         mMixer.exportRecording(getApplicationContext());
         mMixer.startPlaybackRecording(getApplicationContext());
+        mMixer.startRecording();
         return true;
     }
 
@@ -194,6 +198,14 @@ public class SoundActivity extends FragmentActivity
 
     @Override
     public boolean onPlayRecording() {
+        mMixer.exportRecording(getApplicationContext());
+        mMixer.startPlaybackRecording(getApplicationContext());
+        return true;
+    }
+
+    @Override
+    public boolean onStopPlayback() {
+        mMixer.stopRecordingPlayback();
         return true;
     }
 
@@ -218,8 +230,8 @@ public class SoundActivity extends FragmentActivity
     }
 
     @Override
-    public boolean onStopPlayback() {
-        return true;
+    public void onFinishRecording() {
+        mMixer.flushRecording();
     }
 
     @Override

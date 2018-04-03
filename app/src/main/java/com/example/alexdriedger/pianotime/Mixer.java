@@ -70,6 +70,7 @@ public class Mixer {
     public void startRecording() {
         mIsRecording = true;
         mRecordingStartTime = System.currentTimeMillis();
+        newTrack();
     }
 
     public void stopRecording() {
@@ -262,5 +263,17 @@ public class Mixer {
 
     public void newTrack() {
         mMidiEncoder.addTrack();
+    }
+
+    /**
+     * Removes anything from previous recording
+     */
+    public void flushRecording() {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.release();
+        }
+        mLastMidiExport = null;
+        mIsRecording = false;
+        mMidiEncoder = new MidiEncoder();
     }
 }
