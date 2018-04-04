@@ -3,131 +3,120 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.alexdriedger.pianotime.KeyboardActivity">
+    android:layout_height="match_parent">
 
-    <Button
+    <View
         android:id="@+id/button_a_sharp"
-        android:layout_width="80dp"
-        android:layout_height="96dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:text="A#"
-        app:layout_constraintStart_toEndOf="@+id/button_g_sharp"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_g_sharp"
-        android:layout_width="80dp"
-        android:layout_height="96dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:text="G#"
-        app:layout_constraintStart_toEndOf="@+id/button_f_sharp"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_f_sharp"
-        android:layout_width="80dp"
-        android:layout_height="96dp"
-        android:layout_marginStart="156dp"
-        android:layout_marginTop="32dp"
-        android:text="F#"
-        app:layout_constraintStart_toEndOf="@+id/button_c_sharp"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_d_sharp"
-        android:layout_width="80dp"
-        android:layout_height="96dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:text="D#"
-        app:layout_constraintStart_toEndOf="@+id/button_c_sharp"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_b"
-        android:layout_width="80dp"
-        android:layout_height="96dp"
-        android:layout_marginBottom="32dp"
-        android:text="B"
-        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/PianoBlackKey"
+        app:layout_constraintEnd_toEndOf="@+id/button_a"
         app:layout_constraintStart_toEndOf="@+id/button_a" />
 
-    <Button
-        android:id="@+id/button_a"
-        android:layout_width="80dp"
-        android:layout_height="96dp"
-        android:layout_marginBottom="32dp"
-        android:text="A"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <View
+        android:id="@+id/button_g_sharp"
+        style="@style/PianoBlackKey"
+        app:layout_constraintEnd_toEndOf="@+id/button_g"
         app:layout_constraintStart_toEndOf="@+id/button_g" />
 
-    <Button
-        android:id="@+id/button_g"
-        android:layout_width="80dp"
-        android:layout_height="96dp"
-        android:layout_marginBottom="32dp"
-        android:text="G"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <View
+        android:id="@+id/button_f_sharp"
+        style="@style/PianoBlackKey"
+        app:layout_constraintEnd_toEndOf="@+id/button_f"
         app:layout_constraintStart_toEndOf="@+id/button_f" />
 
-    <Button
-        android:id="@+id/button_f"
-        android:layout_width="80dp"
-        android:layout_height="96dp"
-        android:layout_marginBottom="32dp"
-        android:text="F"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_e" />
+    <View
+        android:id="@+id/button_d_sharp"
+        style="@style/PianoBlackKey"
+        app:layout_constraintEnd_toEndOf="@+id/button_d"
+        app:layout_constraintStart_toEndOf="@+id/button_d"/>
 
-    <Button
-        android:id="@+id/button_e"
-        android:layout_width="80dp"
-        android:layout_height="96dp"
-        android:layout_marginBottom="32dp"
-        android:text="E"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_d" />
-
-    <Button
-        android:id="@+id/button_d"
-        android:layout_width="80dp"
-        android:layout_height="96dp"
-        android:layout_marginBottom="32dp"
-        android:text="D"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <View
+        android:id="@+id/button_c_sharp"
+        style="@style/PianoBlackKey"
+        app:layout_constraintEnd_toEndOf="@+id/button_c"
         app:layout_constraintStart_toEndOf="@+id/button_c" />
 
-    <Button
-        android:id="@+id/button_c_sharp"
-        android:layout_width="80dp"
-        android:layout_height="96dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:text="C#"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="parent" />
+    <View
+        android:id="@+id/button_b"
+        style="@style/PianoWhiteKey"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:text="B"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_a" />
 
-    <Button
+    <View
+        android:id="@+id/button_a"
+        style="@style/PianoWhiteKey"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:text="A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_b"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_g" />
+
+    <View
+        android:id="@+id/button_g"
+        style="@style/PianoWhiteKey"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:text="G"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_a"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_f" />
+
+    <View
+        android:id="@+id/button_f"
+        style="@style/PianoWhiteKey"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:text="F"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_g"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_e" />
+
+    <View
+        android:id="@+id/button_e"
+        style="@style/PianoWhiteKey"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:text="E"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_f"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_d" />
+
+    <View
+        android:id="@+id/button_d"
+        style="@style/PianoWhiteKey"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:text="D"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_e"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_c" />
+
+    <View
         android:id="@+id/button_c"
-        android:layout_width="80dp"
-        android:layout_height="96dp"
-        android:layout_marginBottom="32dp"
-        android:layout_marginEnd="8dp"
+        style="@style/PianoWhiteKey"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:text="C"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="@+id/guideline" />
+        app:layout_constraintEnd_toStartOf="@+id/button_d"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="64dp"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".57" />
 
 </android.support.constraint.ConstraintLayout>
