@@ -18,6 +18,7 @@
         </activity>
         <activity android:name=".SoundPadActivity" />
         <activity android:name=".MusicPlayerActivity" />
+        <activity android:name=".CloudStorageActivity" />
         <activity android:name=".SoundActivity"
             android:screenOrientation="landscape"></activity>
     </application>

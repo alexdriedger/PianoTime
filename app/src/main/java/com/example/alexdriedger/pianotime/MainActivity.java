@@ -54,6 +54,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mNavButton = findViewById(R.id.button_to_database);
+        mNavButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                changeActivity(CloudStorageActivity.class);
+            }
+        });
+
     }
 
     private void changeActivity(Class c) {

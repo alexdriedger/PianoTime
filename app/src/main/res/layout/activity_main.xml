@@ -18,4 +18,11 @@
         android:layout_height="wrap_content"
         android:text="Music Player"/>
 
+    <Button
+        android:id="@+id/button_to_database"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="SAVE/GET MIDI FILES" />
+
 </LinearLayout>
