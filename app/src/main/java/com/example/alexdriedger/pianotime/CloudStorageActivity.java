@@ -31,6 +31,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.File;
 import java.util.Locale;
 
 import static android.widget.Toast.LENGTH_LONG;
@@ -49,7 +50,8 @@ public class CloudStorageActivity extends AppCompatActivity implements View.OnCl
     private static final String KEY_DOWNLOAD_URL = "key_download_url";
     private static final String KEY_UPLOAD_URL = "key_upload_url";
 
-    private static  String downloadName = "download_name";
+    // TODO : TEST THAT THIS REMOVES THE EXTRA FOLDER IN FIREBASE
+    private static  String downloadName = "";
 
     private BroadcastReceiver mBroadcastReceiver;
     private ProgressDialog mProgressDialog;
@@ -241,18 +243,19 @@ public class CloudStorageActivity extends AppCompatActivity implements View.OnCl
 //        Toast.makeText(context.getApplicationContext(), fileUri.toString(), Toast.LENGTH_LONG).show();
 
         //Select folder
-        String path = "";
+        String fileName = new File(fileUri.getPath()).getName();
+        String path;
 
         if(folder == 0){
-            path = "DE1/" + downloadName;
+            path = "DE1/" + fileName;
         }
 
         else if(folder == 1){
-            path = "app/" + downloadName;
+            path = "app/" + fileName;
         }
 
         else{
-            path = "midi/" + downloadName;
+            path = "midi/" + fileName;
         }
 
         // Start MyUploadService to upload the file, so that the file is uploaded
