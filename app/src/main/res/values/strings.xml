@@ -205,4 +205,11 @@
         <item>Mute Triangle</item>
         <item>Open Triangl</item>
     </string-array>
+
+    <string-array name="folder_selection_array">
+        <item>DE1</item>
+        <item>Mobile App</item>
+
+    </string-array>
+
 </resources>

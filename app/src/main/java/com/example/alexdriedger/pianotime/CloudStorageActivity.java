@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
@@ -30,6 +32,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Locale;
+
+import static android.widget.Toast.LENGTH_LONG;
 
 /**
  * Created by ryan on 2018/4/2.
@@ -54,6 +58,9 @@ public class CloudStorageActivity extends AppCompatActivity implements View.OnCl
     private Uri mUploadUrl = null;
     private Uri mDownloadUrl = null;
     private Uri mFileUri = null;
+
+    //folder selection indicator
+    private int folder;
 
     EditText editTextDownloadName;
     TextView upload_uri;
@@ -80,8 +87,36 @@ public class CloudStorageActivity extends AppCompatActivity implements View.OnCl
 
         //Spinner litener
         spinnerChooseFolder = (Spinner) findViewById(R.id.spinner_choose_folder);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.folder_selection_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinnerChooseFolder.setAdapter(adapter);
 
+        spinnerChooseFolder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // select DE1
+                if(i == 0){
+                    folder = 0;
+                }
 
+                // select Mobile App
+                else if(i == 1){
+                    folder = 1;
+                }
+
+                //select midi
+                else
+                    folder = 2;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                //Toast.makeText(this, "Please select a path", 4);
+            }
+        });
 
 
         // Restore instance state
@@ -180,7 +215,7 @@ public class CloudStorageActivity extends AppCompatActivity implements View.OnCl
 
                 String name = DocumentFile.fromSingleUri(context,mFileUri).getName();
 
-                Toast.makeText(context.getApplicationContext(), name, Toast.LENGTH_LONG).show();
+                Toast.makeText(context.getApplicationContext(), name, LENGTH_LONG).show();
 
                 if (mFileUri != null) {
                     uploadFromUri(mFileUri);
@@ -205,10 +240,26 @@ public class CloudStorageActivity extends AppCompatActivity implements View.OnCl
 //        Context context = getApplicationContext();
 //        Toast.makeText(context.getApplicationContext(), fileUri.toString(), Toast.LENGTH_LONG).show();
 
+        //Select folder
+        String path = "";
+
+        if(folder == 0){
+            path = "DE1/" + downloadName;
+        }
+
+        else if(folder == 1){
+            path = "app/" + downloadName;
+        }
+
+        else{
+            path = "midi/" + downloadName;
+        }
+
         // Start MyUploadService to upload the file, so that the file is uploaded
         // even if this Activity is killed or put in the background
         startService(new Intent(this, MyUploadService.class)
                 .putExtra(MyUploadService.EXTRA_FILE_URI, fileUri)
+                .putExtra(MyUploadService.EXTRA_UPLOAD_FOLDER, path)
                 .setAction(MyUploadService.ACTION_UPLOAD));
 
         // Show loading spinner
@@ -218,7 +269,21 @@ public class CloudStorageActivity extends AppCompatActivity implements View.OnCl
     private void beginDownload() {
         // Get path
         downloadName = editTextDownloadName.getText().toString().trim();
-        String path = "midi/" + downloadName;
+
+        String path = "";
+
+        if(folder == 0){
+            path = "DE1/" + downloadName;
+        }
+
+        else if(folder == 1){
+            path = "app/" + downloadName;
+        }
+
+        else{
+            path = "midi/" + downloadName;
+        }
+
 
         updateUI(mAuth.getCurrentUser());
         mDownloadUrl = null;

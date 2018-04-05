@@ -34,6 +34,7 @@ public class MyUploadService extends MyBaseTaskService {
     /** Intent Extras **/
     public static final String EXTRA_FILE_URI = "extra_file_uri";
     public static final String EXTRA_UPLOADED_URL = "extra_upload_url";
+    public static final String EXTRA_UPLOAD_FOLDER =  "upload_folder";
 
     // [START declare_ref]
     private StorageReference mStorageRef;
@@ -59,15 +60,16 @@ public class MyUploadService extends MyBaseTaskService {
         Log.d(TAG, "onStartCommand:" + intent + ":" + startId);
         if (ACTION_UPLOAD.equals(intent.getAction())) {
             Uri fileUri = intent.getParcelableExtra(EXTRA_FILE_URI);
+            String path = intent.getParcelableExtra(EXTRA_UPLOAD_FOLDER);
 
-            uploadFromUri(fileUri);
+            uploadFromUri(fileUri, path);
         }
 
         return START_REDELIVER_INTENT;
     }
 
     // [START upload_from_uri]
-    private void uploadFromUri(final Uri fileUri) {
+    private void uploadFromUri(final Uri fileUri, String path) {
         Log.d(TAG, "uploadFromUri:src:" + fileUri.toString());
 
         // [START_EXCLUDE]
@@ -80,7 +82,7 @@ public class MyUploadService extends MyBaseTaskService {
         Context context = getApplicationContext();
         String name = DocumentFile.fromSingleUri(context,fileUri).getName();
 
-        final StorageReference fileRef = mStorageRef.child("midi")
+        final StorageReference fileRef = mStorageRef.child(path)
                 .child(name);
         // [END get_child_ref]
 
