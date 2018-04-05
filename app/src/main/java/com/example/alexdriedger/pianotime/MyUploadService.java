@@ -80,11 +80,11 @@ public class MyUploadService extends MyBaseTaskService {
         // [START get_child_ref]
         // Get a reference to store file at photos/<FILENAME>.jpg
         Context context = getApplicationContext();
-        String name = DocumentFile.fromSingleUri(context,fileUri).getName();
+//        String name = DocumentFile.fromSingleUri(context,fileUri).getName();
         Log.d("Upload service", "Path: " + path);
 
-        final StorageReference fileRef = mStorageRef.child(path)
-                .child(name);
+        final StorageReference fileRef = mStorageRef.child(path);
+//                .child(name)
         // [END get_child_ref]
 
         // Upload file to Firebase Storage

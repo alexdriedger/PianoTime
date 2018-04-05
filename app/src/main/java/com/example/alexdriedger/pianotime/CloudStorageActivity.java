@@ -49,7 +49,8 @@ public class CloudStorageActivity extends AppCompatActivity implements View.OnCl
     private static final String KEY_DOWNLOAD_URL = "key_download_url";
     private static final String KEY_UPLOAD_URL = "key_upload_url";
 
-    private static  String downloadName = "download_name";
+    // TODO : TEST THAT THIS REMOVES THE EXTRA FOLDER IN FIREBASE
+    private static  String downloadName = "";
 
     private BroadcastReceiver mBroadcastReceiver;
     private ProgressDialog mProgressDialog;

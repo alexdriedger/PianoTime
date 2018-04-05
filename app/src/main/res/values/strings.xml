@@ -25,6 +25,13 @@
     <string name="download_success">Download finished</string>
     <string name="download_failure">Download failure</string>
 
+    <string name="ai_alert_message">
+        Would you like to create a new version of your song with AI? :D
+    </string>
+
+    <string name="ai_alert_yes">Yes!</string>
+    <string name="ai_alert_no">No</string>
+
     <string-array name="keyboard_instruments">
         <item>Acoustic Grand Piano</item>
         <item>Bright Acoustic Piano</item>
@@ -211,5 +218,8 @@
         <item>Mobile App</item>
 
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

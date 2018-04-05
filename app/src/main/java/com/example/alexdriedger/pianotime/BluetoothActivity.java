@@ -1,8 +1,14 @@
 package com.example.alexdriedger.pianotime;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +18,8 @@ import com.leff.midi.event.MidiEvent;
 import java.io.File;
 import java.util.LinkedList;
 
-public class BluetoothActivity extends AppCompatActivity implements MyBTService.BluetoothEventListener {
+public class BluetoothActivity extends FragmentActivity
+        implements MyBTService.BluetoothEventListener, AIDialogFragment.AIDialogListener {
 
     private MidiEncoder mMidiEncoder;
     MyBTService bts;
@@ -22,22 +29,25 @@ public class BluetoothActivity extends AppCompatActivity implements MyBTService.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth);
         mMidiEncoder = new MidiEncoder();
+        bts = null;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (bts != null) {
+//        if (bts != null) {
             bts = new MyBTService(getApplicationContext());
             bts.setMyBTServiceListener(this);
-        }
+//        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        bts.disconnect();
-        bts = null;
+//        if (bts != null) {
+            bts.disconnect();
+            bts = null;
+//        }
     }
 
     @Override
@@ -52,5 +62,29 @@ public class BluetoothActivity extends AppCompatActivity implements MyBTService.
 
         MediaPlayer mp = MediaPlayer.create(getApplicationContext(), Uri.fromFile(f));
         mp.start();
+
+        startService(new Intent(this, MyUploadService.class)
+                .putExtra(MyUploadService.EXTRA_FILE_URI, Uri.fromFile(f))
+                .putExtra(MyUploadService.EXTRA_UPLOAD_FOLDER, "DE1/")
+                .setAction(MyUploadService.ACTION_UPLOAD));
+
+        showAIDialog();
+
+    }
+
+    private void showAIDialog() {
+        DialogFragment newFragment = new AIDialogFragment();
+        newFragment.show(getFragmentManager(), "ai");
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Log.d("Bluetooth", "Dialog callback success success");
+        // TODO : CALL AWS MACHINE LEARNING TO SEND FILE
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Log.d("Bluetooth", "Dialog callback negative success");
     }
 }
