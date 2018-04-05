@@ -60,7 +60,7 @@ public class MyUploadService extends MyBaseTaskService {
         Log.d(TAG, "onStartCommand:" + intent + ":" + startId);
         if (ACTION_UPLOAD.equals(intent.getAction())) {
             Uri fileUri = intent.getParcelableExtra(EXTRA_FILE_URI);
-            String path = intent.getParcelableExtra(EXTRA_UPLOAD_FOLDER);
+            String path = intent.getStringExtra(EXTRA_UPLOAD_FOLDER);
 
             uploadFromUri(fileUri, path);
         }
@@ -81,6 +81,7 @@ public class MyUploadService extends MyBaseTaskService {
         // Get a reference to store file at photos/<FILENAME>.jpg
         Context context = getApplicationContext();
         String name = DocumentFile.fromSingleUri(context,fileUri).getName();
+        Log.d("Upload service", "Path: " + path);
 
         final StorageReference fileRef = mStorageRef.child(path)
                 .child(name);
