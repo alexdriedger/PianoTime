@@ -39,14 +39,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mNavButton = findViewById(R.id.button_to_music_player);
-        mNavButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeActivity(MusicPlayerActivity.class);
-            }
-        });
-
         mNavButton = findViewById(R.id.button_to_database);
         mNavButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -60,14 +52,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 changeActivity(BluetoothActivity.class);
-            }
-        });
-
-        mNavButton = findViewById(R.id.button_to_server);
-        mNavButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeActivity(ServerActivity.class);
             }
         });
 
