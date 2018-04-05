@@ -22,14 +22,22 @@ public class BluetoothActivity extends AppCompatActivity implements MyBTService.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth);
         mMidiEncoder = new MidiEncoder();
-        bts = new MyBTService(getApplicationContext());
-        bts.setMyBTServiceListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (bts != null) {
+            bts = new MyBTService(getApplicationContext());
+            bts.setMyBTServiceListener(this);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         bts.disconnect();
+        bts = null;
     }
 
     @Override
