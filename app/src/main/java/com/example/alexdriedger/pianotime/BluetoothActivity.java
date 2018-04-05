@@ -65,7 +65,7 @@ public class BluetoothActivity extends FragmentActivity
 
         startService(new Intent(this, MyUploadService.class)
                 .putExtra(MyUploadService.EXTRA_FILE_URI, Uri.fromFile(f))
-                .putExtra(MyUploadService.EXTRA_UPLOAD_FOLDER, "DE1/")
+                .putExtra(MyUploadService.EXTRA_UPLOAD_FOLDER, "DE1/" + f.getName())
                 .setAction(MyUploadService.ACTION_UPLOAD));
 
         showAIDialog();

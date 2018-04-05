@@ -84,7 +84,7 @@ public class MyUploadService extends MyBaseTaskService {
         Log.d("Upload service", "Path: " + path);
 
         final StorageReference fileRef = mStorageRef.child(path);
-//                .child(name)
+//                .child(name);
         // [END get_child_ref]
 
         // Upload file to Firebase Storage
