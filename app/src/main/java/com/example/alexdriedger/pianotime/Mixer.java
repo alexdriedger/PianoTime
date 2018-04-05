@@ -2,7 +2,9 @@ package com.example.alexdriedger.pianotime;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.media.audiofx.EnvironmentalReverb;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 
 import com.leff.midi.event.MidiEvent;
@@ -262,7 +264,7 @@ public class Mixer {
      * @return True is successful. False otherwise
      */
     public boolean exportRecording(Context c, String fileName) {
-        File f =  new File(c.getFilesDir() + File.separator + fileName);
+        File f =  new File(c.getExternalFilesDir(Environment.DIRECTORY_MUSIC) + File.separator + fileName + ".mid");
         if (mMidiEncoder.exportToFile(f)) {
             // Export was successful
             mLastMidiExport = f;
