@@ -62,6 +62,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mNavButton = findViewById(R.id.button_to_bluetooth);
+        mNavButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeActivity(BluetoothActivity.class);
+            }
+        });
+
     }
 
     private void changeActivity(Class c) {
