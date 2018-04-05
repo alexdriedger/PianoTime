@@ -320,11 +320,15 @@ public class MyBTService {
     private void parse(){
         byte[] dataBuffer = new byte[8];
         while (dataQueue.size()>=8){
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < 8; i++) {
                 dataBuffer[i] = dataQueue.remove();
+                sb.append(String.format("%x", dataBuffer[i]));
             }
 
-            if(String.format("%x",dataBuffer)==TERMINATION_EVENT){
+
+
+            if(sb.toString().equals(TERMINATION_EVENT)){
                 Log.d(TAG, "Found TERMINATION_EVENT");
 
                 listener.onBluetoothDataReady(midiEvents);
@@ -359,6 +363,8 @@ public class MyBTService {
             else{
                 midiEvents.add(new NoteOff(tick, 0, note, vol));
             }
+
+            Log.d(TAG, midiEvents.peekLast().toString());
 
         }
 
