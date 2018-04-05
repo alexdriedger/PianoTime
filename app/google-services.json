@@ -1,0 +1,138 @@
+{
+  "project_info": {
+    "project_number": "121945250147",
+    "firebase_url": "https://storage-quickstart-bc391.firebaseio.com",
+    "project_id": "storage-quickstart-bc391",
+    "storage_bucket": "storage-quickstart-bc391.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121945250147:android:4ddddc009dade48c",
+        "android_client_info": {
+          "package_name": "com.example.alexdriedger.pianotime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121945250147-d3ans7jcfbgi9mov0aro57avcpg9lmpn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhIjC92_mW4W7OFUXXtbsh3RefHRMrPXY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121945250147:android:f2f38b1678895780",
+        "android_client_info": {
+          "package_name": "com.example.ryan.storage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121945250147-pojk40h4vek3uas4guvourkec8gds51r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ryan.storage",
+            "certificate_hash": "63826d64821e1c988bf1dbd24b67cd8e304050ca"
+          }
+        },
+        {
+          "client_id": "121945250147-d3ans7jcfbgi9mov0aro57avcpg9lmpn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhIjC92_mW4W7OFUXXtbsh3RefHRMrPXY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121945250147-d3ans7jcfbgi9mov0aro57avcpg9lmpn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121945250147:android:a806387762327d53",
+        "android_client_info": {
+          "package_name": "com.google.firebase.quickstart.firebasestorage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121945250147-80krmq7f8vtcnpqfd57arkrceo2vcaoc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.google.firebase.quickstart.firebasestorage",
+            "certificate_hash": "63826d64821e1c988bf1dbd24b67cd8e304050ca"
+          }
+        },
+        {
+          "client_id": "121945250147-kpthlr2ql77r94ph6loc7f07ihujd4iu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.google.firebase.quickstart.firebasestorage",
+            "certificate_hash": "055b972d728f851524068e49911d799fa6c2d1b1"
+          }
+        },
+        {
+          "client_id": "121945250147-d3ans7jcfbgi9mov0aro57avcpg9lmpn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhIjC92_mW4W7OFUXXtbsh3RefHRMrPXY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121945250147-d3ans7jcfbgi9mov0aro57avcpg9lmpn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
