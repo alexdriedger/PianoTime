@@ -28,14 +28,22 @@ import com.leff.midi.event.NoteOn;
 public class MyBTService {
     //Interface for BluetoothEventListener
     public interface BluetoothEventListener {
-        public void onBluetoothDiscovered(String connectedDeviceName);
-        public void onBluetoothDataReady(byte[] data, int size);
-        public void onMidiEventsReady(LinkedList<MidiEvent> midiEvents);
+//        public void onBluetoothDiscovered(String connectedDeviceName);
+        public void onBluetoothDataReady(LinkedList<MidiEvent> midiEvents);
+//        public void onMidiEventsReady(LinkedList<MidiEvent> midiEvents);
 
     }
 
     // private listener
     private BluetoothEventListener listener;
+
+    private Queue<Byte> dataQueue = new LinkedList<>();
+
+    private LinkedList<MidiEvent> midiEvents= new LinkedList<>();
+
+    private long tick = 0;
+
+    private final String BUFFER_TERMINATION = "ffffffff";
 
     //MyBTService constructor
     public MyBTService(Context context){
@@ -50,15 +58,6 @@ public class MyBTService {
 
     }
 
-    //Add these in the child method
-    public void onBluetoothDataReady(byte[] data, int size){
-        if(data!=null) {
-
-            for(int i = 0; i < size; i++){
-                //dataQueue.add(data[i]);// Declear a Queue<Byte> in the class that calls BluetoothEventListener
-            }
-        }
-    }
 
 
 
@@ -314,45 +313,24 @@ public class MyBTService {
 
                         int [] data = new int[bytes];
 
-                        LinkedList<MidiEvent> eventArray = new LinkedList<>();
-
+                        StringBuilder sb = new StringBuilder();
 
                         for(int i=0; i<bytes; i++) {
 
                             data[i] = (int)buffer[i];
+                            dataQueue.add(buffer[i]);
 
-
+                            sb.append(String.format("%02X", data[i]));
 
                         }
 
-//                        int i = 0;
-//                        long tick = 0;
-//                        for(int j = 0; j < bytes; j+=8){
-//                            int bpm = data[j];
-//                            int deltaSmaple = data[j+1]|data[j+2]|data[j+3]|data[j+4];
-//                            int deltaTick = (int)((double)(480*deltaSmaple*bpm)/60.0/32000.0);
-//                            int note = data[j+5];
-//                            int on_off = data[j+6];
-//                            int vol = data[j+7];
-//
-//                            tick += deltaTick;
-//
-//                            if(on_off==1){
-//                                eventArray.add(i, new NoteOn(tick, 0, note, vol));
-//                            }
-//
-//                            else{
-//                                eventArray.add(i, new NoteOff(tick, 0, note, vol));
-//                            }
-//
-//                            i++;
-//
-//                        }
+                        Log.d(TAG, sb.toString());
 
+                        parse();
 
-                        Log.d(TAG, "message ready:"+eventArray);
-                        listener.onBluetoothDataReady(buffer, bytes);
                     }
+
+
                 } catch (IOException e) {
                     //if mSocket.close() called somewhere else
                     //or connection closed
@@ -379,33 +357,22 @@ public class MyBTService {
         }
     }
 
-    //send message
-    private void sendMessageHandle(String msg)
-    {
-        if (mBtSocket == null)
-        {
-            Log.d("----------------------", "No connection");
-            return;
-        }
 
-        try {
-            OutputStream os = mBtSocket.getOutputStream();
-            os.write(msg.getBytes()); //
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
 
     //Call this function when all the data buffers sent are received
-    public LinkedList<MidiEvent> getMidiEvents(Queue<Byte> dataQueue){
-        LinkedList<MidiEvent> midiEvents= new LinkedList<>();
 
-        long tick = 0;
+    public void parse(){
+
+
+
         byte[] dataBuffer = new byte[8];
         while (dataQueue.size()>=8){
             for (int i = 0; i < 8; i++) {
                 dataBuffer[i] = dataQueue.remove();
+            }
+
+            if(String.format("%02X",dataBuffer) == "ffffffff"){
+                listener.onBluetoothDataReady(midiEvents);
             }
 
             int bpm = castByteToUnsignedint(dataBuffer[0]);
@@ -435,7 +402,7 @@ public class MyBTService {
 
         }
 
-        return midiEvents;
+
     }
 
     private int castByteToUnsignedint(byte b){

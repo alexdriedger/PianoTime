@@ -60,7 +60,7 @@ public class MyUploadService extends MyBaseTaskService {
         Log.d(TAG, "onStartCommand:" + intent + ":" + startId);
         if (ACTION_UPLOAD.equals(intent.getAction())) {
             Uri fileUri = intent.getParcelableExtra(EXTRA_FILE_URI);
-            String path = intent.getParcelableExtra(EXTRA_UPLOAD_FOLDER);
+            String path = intent.getStringExtra(EXTRA_UPLOAD_FOLDER);
 
             uploadFromUri(fileUri, path);
         }
