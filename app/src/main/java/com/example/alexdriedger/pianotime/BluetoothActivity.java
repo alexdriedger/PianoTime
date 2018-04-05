@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.leff.midi.event.MidiEvent;
 
@@ -23,6 +24,7 @@ public class BluetoothActivity extends FragmentActivity
 
     private MidiEncoder mMidiEncoder;
     MyBTService bts;
+    private String fileName; // TODO : CHANGE THIS
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class BluetoothActivity extends FragmentActivity
 
         File f =  new File(getExternalFilesDir(Environment.DIRECTORY_MUSIC) + File.separator + "de1_mixtape_" + System.currentTimeMillis() + ".mid");
         mMidiEncoder.exportToFile(f);
+        fileName = f.getName();
 
         MediaPlayer mp = MediaPlayer.create(getApplicationContext(), Uri.fromFile(f));
         mp.start();
@@ -80,11 +83,16 @@ public class BluetoothActivity extends FragmentActivity
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.d("Bluetooth", "Dialog callback success success");
-        // TODO : CALL AWS MACHINE LEARNING TO SEND FILE
+        TextView tv = findViewById(R.id.bt_text);
+        tv.setText("You have AI generated music!");
+        SocketThread tem = new SocketThread(fileName);
+        tem.start();
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
         Log.d("Bluetooth", "Dialog callback negative success");
+        TextView tv = findViewById(R.id.bt_text);
+        tv.setText("Upload complete");
     }
 }
