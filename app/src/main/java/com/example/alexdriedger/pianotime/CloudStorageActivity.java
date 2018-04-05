@@ -304,6 +304,7 @@ public class CloudStorageActivity extends AppCompatActivity implements View.OnCl
         // Pick an image from storage
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
+
         startActivityForResult(intent, RC_FIND_FILE);
 
 
