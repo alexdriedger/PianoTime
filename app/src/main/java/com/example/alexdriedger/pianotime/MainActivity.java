@@ -23,13 +23,6 @@ import com.leff.midi.util.MidiProcessor;
 
 import org.billthefarmer.mididriver.MidiDriver;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,14 +36,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 changeActivity(SoundActivity.class);
-            }
-        });
-
-        mNavButton = findViewById(R.id.button_to_music_player);
-        mNavButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeActivity(MusicPlayerActivity.class);
             }
         });
 
@@ -76,5 +61,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, c);
         startActivity(intent);
     }
+
+
 
 }

@@ -1,34 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/blue_background"
     android:orientation="vertical"
     tools:context="com.example.alexdriedger.pianotime.MainActivity">
 
     <Button
         android:id="@+id/button_to_keyboard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Keyboard" />
-
-    <Button
-        android:id="@+id/button_to_music_player"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Music Player"/>
+        style="@style/MainButtons"
+        android:text="Keyboard"
+        app:layout_constraintBottom_toTopOf="@+id/button_to_database"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_to_database"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SAVE/GET MIDI FILES" />
+        style="@style/MainButtons"
+        android:text="Upload and Download"
+        app:layout_constraintBottom_toTopOf="@+id/button_to_bluetooth"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_to_keyboard" />
 
     <Button
         android:id="@+id/button_to_bluetooth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Bluetooth"/>
+        style="@style/MainButtons"
+        android:text="Bluetooth"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_to_database" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
